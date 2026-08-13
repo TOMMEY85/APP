@@ -1,0 +1,64 @@
+{
+  "name": "carpzone",
+  "version": "1.0.0",
+  "description": "CARPZONE - Application professionnelle de pêche à la carpe | Analyse. Prépare. Capture.",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "http-server -p 8000",
+    "build": "echo 'No build needed for this project'",
+    "export": "echo 'Use App.exportData() in browser console'"
+  },
+  "keywords": [
+    "pêche",
+    "carpe",
+    "fishing",
+    "carp",
+    "mobile",
+    "web-app",
+    "application",
+    "carpiste"
+  ],
+  "author": "CARPZONE Development",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carpzone/app"
+  },
+  "homepage": "https://carpzone.app",
+  "bugs": {
+    "url": "https://github.com/carpzone/app/issues",
+    "email": "contact@carpzone.app"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.0"
+  },
+  "dependencies": {},
+  "optionalDependencies": {},
+  "files": [
+    "index.html",
+    "css/",
+    "js/",
+    "data/",
+    "assets/",
+    "README.md"
+  ],
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead",
+    "not IE 11"
+  ],
+  "metadata": {
+    "type": "mobile-web-app",
+    "category": "sport",
+    "theme_color": "#080808",
+    "background_color": "#080808",
+    "display": "standalone",
+    "orientation": "portrait"
+  }
+}
