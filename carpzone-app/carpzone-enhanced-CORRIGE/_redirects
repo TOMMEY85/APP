@@ -1,0 +1,4 @@
+# Redirects pour CARPZONE SPA
+# Toutes les routes non trouvées vont à index.html
+
+/*    /index.html   200
