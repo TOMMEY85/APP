@@ -70,7 +70,11 @@ const UIGenerator = {
       const pressureTrend = WeatherManager.getPressureTrend();
       const humidity = weather.relative_humidity_2m;
       
-      html += `
+            const lastUpdated = WeatherManager.getLastUpdatedLabel();
+      const gusts = weather.wind_gusts_10m != null ? Math.round(weather.wind_gusts_10m) : null;
+      const surfacePressure = weather.surface_pressure != null ? Math.round(weather.surface_pressure) : null;
+
+html += `
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
           <div>
             <div style="font-size: 32px;">${weatherEmoji}</div>
@@ -82,11 +86,13 @@ const UIGenerator = {
             <div style="font-size: 12px; color: #999; margin-bottom: 4px;">💨 Vent</div>
             <div style="font-size: 16px; font-weight: 600;">${Math.round(weather.wind_speed_10m)} km/h</div>
             <div style="font-size: 13px; color: #ccc;">Direction: ${windDir}</div>
+            <div style="font-size: 12px; color: #999;">Rafales: ${gusts !== null ? gusts + ' km/h' : '—'}</div>
           </div>
         </div>
         
         <div style="background: #0f0f0f; border-radius: 8px; padding: 8px; margin-bottom: 8px;">
-          <div style="font-size: 12px; color: #999;">📊 Pression: ${pressure} hPa ${pressureTrend}</div>
+          <div style="font-size: 12px; color: #999;">📊 Pression mer: ${pressure} hPa ${pressureTrend}</div>
+          <div style="font-size: 11px; color: #777; margin-top: 3px;">Pression locale: ${surfacePressure !== null ? surfacePressure + ' hPa' : '—'}</div>
           <div style="font-size: 11px; color: #666; margin-top: 4px;">${WeatherManager.getPressureHistory()}</div>
         </div>
         
@@ -222,15 +228,6 @@ const UIGenerator = {
           `).join('') : '<div style="padding: 12px; color: #666; text-align: center;">Cliquez sur la carte pour ajouter des spots</div>'}
         </div>
       </div>
-      
-      <script>
-        // Initialiser la carte quand l'écran se charge
-        setTimeout(() => {
-          if (!MapManager.map) {
-            MapManager.init('map-container');
-          }
-        }, 100);
-      </script>
     `;
     
     return html;
@@ -255,31 +252,32 @@ const UIGenerator = {
 
   // Génère une carte de session
   generateSessionCard(session) {
+    const catches = typeof getSessionCatches === 'function' ? getSessionCatches(session.id) : [];
+    const totalWeight = catches.reduce((sum,c) => sum + (parseFloat(c.weight)||0), 0).toFixed(1);
+
     return `
       <div class="session-card">
         <div class="session-header">
-          <div onclick="App.viewSessionDetails('${session.id}')" style="flex: 1; cursor: pointer;">
+          <div onclick="App.viewSessionDetails('${session.id}')" style="flex:1;cursor:pointer;">
             <div class="session-title">${session.name}</div>
-            <div style="font-size: 11px; color: var(--text-dark);">${session.location} • ${this.formatDate(session.startDate)}</div>
+            <div style="font-size:11px;color:var(--text-dark);">${session.location} • ${this.formatDate(session.startDate)}</div>
           </div>
-          <div style="display: flex; gap: 8px;">
-            ${session.status === 'active' ? '<div class="session-status">EN COURS</div>' : ''}
+          ${session.status === 'active' ? '<div class="session-status">EN COURS</div>' : '<div style="font-size:10px;color:#777;">TERMINÉE</div>'}
+        </div>
+        <div class="session-stat"><span>Prises:</span><span class="session-value">${catches.length}</span></div>
+        <div class="session-stat"><span>Poids total:</span><span class="session-value">${totalWeight} kg</span></div>
+
+        ${catches.slice(0,3).map(c => `
+          <div style="display:flex;gap:8px;align-items:center;margin-top:7px;">
+            ${c.photo ? `<img src="${c.photo}" style="width:38px;height:38px;border-radius:7px;object-fit:cover;">` : '<div style="width:38px;height:38px;border-radius:7px;background:#111;display:flex;align-items:center;justify-content:center;">🐟</div>'}
+            <div style="font-size:11px;color:#ccc;">${c.species || 'Carpe'} • <strong>${c.weight} kg</strong></div>
           </div>
-        </div>
-        <div class="session-stat">
-          <span>Durée:</span>
-          <span class="session-value">${this.calculateDuration(session.startDate, session.endDate)}</span>
-        </div>
-        <div class="session-stat">
-          <span>Prises:</span>
-          <span class="session-value">${session.catches} carpe(s)</span>
-        </div>
-        <div class="session-stat">
-          <span>Poids total:</span>
-          <span class="session-value">${session.totalWeight} kg</span>
-        </div>
-        <div style="display: flex; gap: 8px; margin-top: 12px;">
-          <button onclick="confirmDelete('Session', '${session.name}', () => deleteSession('${session.id}') && App.reloadAllScreens())" style="flex: 1; padding: 8px; background: #333; color: #ccc; border: 1px solid #555; border-radius: 6px; font-size: 12px; cursor: pointer;">🗑️ Supprimer</button>
+        `).join('')}
+
+        <div style="display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;">
+          ${session.status === 'active' ? `<button onclick="openAddCatchForm('${session.id}')" style="flex:1;padding:8px;background:#D00000;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;">🐟 Ajouter prise</button>` : ''}
+          <button onclick="openEditSessionForm('${session.id}')" style="flex:1;padding:8px;background:#191919;color:#fff;border:1px solid #D00000;border-radius:6px;font-size:11px;">✏️ Modifier</button>
+          <button onclick="confirmDelete('Session', '${session.name}', () => deleteSession('${session.id}') && App.reloadAllScreens())" style="flex:1;padding:8px;background:#333;color:#ccc;border:1px solid #555;border-radius:6px;font-size:11px;">🗑️ Supprimer</button>
         </div>
       </div>
     `;
@@ -316,7 +314,9 @@ const UIGenerator = {
         ${AppData.catches.map((c, idx) => `
           <div class="catch-item">
             <div style="display: flex; gap: 12px; width: 100%;">
-              <div class="catch-thumb" style="background: linear-gradient(135deg, var(--accent-red) 0%, hsl(0, 100%, ${40 + idx * 5}%) 100%); cursor: pointer;" onclick="App.viewCatchDetails('${c.id}')">🐟</div>
+              ${c.photo
+                ? `<img class="catch-thumb" src="${c.photo}" alt="Photo de la prise" style="object-fit:cover;cursor:pointer;border-radius:8px;" onclick="App.viewCatchDetails('${c.id}')">`
+                : `<div class="catch-thumb" style="background:linear-gradient(135deg,var(--accent-red) 0%,hsl(0,100%,${40 + idx * 5}%) 100%);cursor:pointer;" onclick="App.viewCatchDetails('${c.id}')">🐟</div>`}
               <div class="catch-info" style="flex: 1; cursor: pointer;" onclick="App.viewCatchDetails('${c.id}')">
                 <div class="catch-name">${c.species}</div>
                 <div class="catch-meta">${this.formatDate(c.date)} • ${c.bait}</div>
@@ -350,6 +350,28 @@ const UIGenerator = {
           <button onclick="ProfileManager.openEditForm()" style="width: 100%; margin-top: 12px; padding: 8px; background: #D00000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">✏️ Modifier mon profil</button>
         </div>
         
+        <!-- Compte et sauvegarde cloud -->
+        <div style="margin-bottom: 24px;">
+          <div style="font-size: 12px; color: #999; margin-bottom: 8px;">☁️ COMPTE & SAUVEGARDE</div>
+          <div style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:12px;">
+            ${typeof CloudManager !== 'undefined' && CloudManager.isLoggedIn() ? `
+              <div style="font-size:12px;color:#fff;margin-bottom:5px;">Connecté : <strong>${CloudManager.getEmail()}</strong></div>
+              <div style="font-size:11px;color:#4caf50;margin-bottom:10px;">✓ ${CloudManager.getStatusLabel()}</div>
+              <div style="display:flex;gap:8px;">
+                <button onclick="AccountUI.syncNow()" style="flex:1;padding:9px;background:#D00000;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;">☁️ Synchroniser</button>
+                <button onclick="AccountUI.signOut()" style="flex:1;padding:9px;background:#111;color:#ccc;border:1px solid #555;border-radius:6px;font-size:11px;cursor:pointer;">Déconnexion</button>
+              </div>
+            ` : `
+              <div style="font-size:12px;color:#ccc;margin-bottom:8px;">Connectez-vous pour retrouver vos données sur un autre téléphone.</div>
+              <div style="font-size:10px;color:#777;margin-bottom:10px;">Vos données actuelles restent sur cet appareil et seront envoyées dans votre compte lors de la première connexion.</div>
+              <div style="display:flex;gap:8px;">
+                <button onclick="AccountUI.openSignIn()" style="flex:1;padding:9px;background:#D00000;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;">Se connecter</button>
+                <button onclick="AccountUI.openSignUp()" style="flex:1;padding:9px;background:#111;color:#fff;border:1px solid #D00000;border-radius:6px;font-size:11px;cursor:pointer;">Créer un compte</button>
+              </div>
+            `}
+          </div>
+        </div>
+
         <!-- Statistiques -->
         <div style="margin-bottom: 24px;">
           <div style="font-size: 12px; color: #999; margin-bottom: 8px;">📈 STATISTIQUES</div>
@@ -400,14 +422,14 @@ const UIGenerator = {
             </div>
             <div>
               <span style="color: #999;">Données sauvegardées:</span>
-              <span style="color: #fff;">✓ Locales (private)</span>
+              <span style="color: #fff;">${typeof CloudManager !== 'undefined' && CloudManager.isLoggedIn() ? '✓ Local + cloud' : '✓ Locales'}</span>
             </div>
           </div>
         </div>
         
         <!-- Version -->
         <div style="text-align: center; padding-top: 12px; border-top: 1px solid #333;">
-          <div style="font-size: 10px; color: #666;">CARPZONE v2.0 • Analyse. Prépare. Capture.</div>
+          <div style="font-size: 10px; color: #666;">CARPZONE v6.0 • Compte & sauvegarde cloud</div>
         </div>
       </div>
     `;

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'carpzone-pwa-v2-openmeteo';
+const CACHE_NAME = 'carpzone-pwa-v6-account-cloud';
 const APP_SHELL = [
   './',
   './index.html',
@@ -12,6 +12,7 @@ const APP_SHELL = [
   './js/weather.js',
   './js/profile-manager.js',
   './js/map-manager.js',
+  './js/auth-cloud.js',
   './js/ui-generator.js',
   './js/modals.js',
   './js/navigation.js',

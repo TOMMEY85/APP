@@ -42,6 +42,7 @@ const MapManager = {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
+        if (!this.map) return;
         this.map.setView([latitude, longitude], 12);
         
         // Ajouter un marqueur pour l'utilisateur
@@ -58,10 +59,10 @@ const MapManager = {
           }).addTo(this.map).bindPopup('📍 Votre position');
         }
         
-        // Charger météo de cette position
-        if (WeatherManager && WeatherManager.fetchWeather) {
-          WeatherManager.fetchWeather(latitude, longitude).then(() => {
-            Navigation.switchScreen('home'); // Rafraîchir l'accueil avec météo
+        // Charger la météo de cette position sans quitter la carte.
+        if (typeof WeatherManager !== 'undefined' && WeatherManager.fetchWeather) {
+          WeatherManager.fetchWeather(latitude, longitude).catch((error) => {
+            console.warn('Météo indisponible depuis la carte:', error);
           });
         }
       },

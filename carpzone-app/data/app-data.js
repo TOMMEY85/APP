@@ -83,6 +83,34 @@ let AppData = DataManager.load();
 // Sauvegarder les données
 function saveAppData() {
   DataManager.save(AppData);
+
+  // Toujours sauvegarder localement d'abord.
+  // Si un compte est connecté, la synchro cloud se fait ensuite en arrière-plan.
+  if (typeof CloudManager !== 'undefined' && CloudManager.isLoggedIn()) {
+    CloudManager.scheduleSync();
+  }
+}
+
+// ============================================
+// LIAISON PRISES ↔ SESSIONS
+// ============================================
+
+function recalculateSessionStats(sessionId = null) {
+  const sessions = sessionId
+    ? AppData.sessions.filter(s => s.id === sessionId)
+    : AppData.sessions;
+
+  sessions.forEach(session => {
+    const catches = AppData.catches.filter(c => c.sessionId === session.id);
+    session.catches = catches.length;
+    session.totalWeight = parseFloat(
+      catches.reduce((sum, c) => sum + (parseFloat(c.weight) || 0), 0).toFixed(1)
+    );
+  });
+}
+
+function getSessionCatches(sessionId) {
+  return AppData.catches.filter(c => c.sessionId === sessionId);
 }
 
 // ============================================
@@ -139,22 +167,31 @@ function addCatch(catchData) {
     createdAt: new Date().toISOString()
   };
   AppData.catches.unshift(newCatch);
-  
+
+  if (newCatch.sessionId) {
+    recalculateSessionStats(newCatch.sessionId);
+  }
+
   if (newCatch.weight > (AppData.user.stats.personalRecord || 0)) {
     AppData.user.stats.personalRecord = newCatch.weight;
   }
-  
+
   saveAppData();
   updateStatistics();
   updateBadges();
-  showNotification('Prise enregistrée ✓');
+  showNotification(newCatch.sessionId ? 'Prise ajoutée à la session ✓' : 'Prise enregistrée ✓');
   return newCatch;
 }
 
 function updateCatch(id, catchData) {
   const catchItem = AppData.catches.find(c => c.id === id);
   if (catchItem) {
+    const previousSessionId = catchItem.sessionId || null;
     Object.assign(catchItem, catchData);
+
+    if (previousSessionId) recalculateSessionStats(previousSessionId);
+    if (catchItem.sessionId) recalculateSessionStats(catchItem.sessionId);
+
     if (catchData.weight && catchData.weight > (AppData.user.stats.personalRecord || 0)) {
       AppData.user.stats.personalRecord = catchData.weight;
     }
@@ -169,7 +206,9 @@ function updateCatch(id, catchData) {
 function deleteCatch(id) {
   const index = AppData.catches.findIndex(c => c.id === id);
   if (index !== -1) {
+    const sessionId = AppData.catches[index].sessionId || null;
     AppData.catches.splice(index, 1);
+    if (sessionId) recalculateSessionStats(sessionId);
     saveAppData();
     updateStatistics();
     showNotification('Prise supprimée ✓');
@@ -177,6 +216,9 @@ function deleteCatch(id) {
   }
   return false;
 }
+
+recalculateSessionStats();
+saveAppData();
 
 // ============================================
 // CRUD - SPOTS

@@ -25,6 +25,12 @@ const Navigation = {
 
   // Change d'écran
   switchScreen(screenId) {
+    // Détruire Leaflet quand on quitte la carte, car les vues sont régénérées.
+    if (this.currentScreen === 'map' && screenId !== 'map' &&
+        typeof MapManager !== 'undefined' && MapManager.map) {
+      MapManager.destroy();
+    }
+
     // Masquer tous les écrans
     document.querySelectorAll('.screen').forEach(screen => {
       screen.classList.remove('active');
@@ -47,6 +53,27 @@ const Navigation = {
       const contentElement = screen.querySelector(screenMap[screenId]);
       if (contentElement) {
         contentElement.innerHTML = this.getScreenContent(screenId);
+
+        if (screenId === 'map') {
+          setTimeout(() => {
+            try {
+              const container = document.getElementById('map-container');
+              if (!container) return;
+
+              if (typeof L === 'undefined') {
+                container.innerHTML = '<div style="padding:20px;color:#999;text-align:center;">Carte indisponible : Leaflet ne s\'est pas chargé.</div>';
+                return;
+              }
+
+              if (typeof MapManager !== 'undefined') {
+                if (MapManager.map) MapManager.destroy();
+                MapManager.init('map-container');
+              }
+            } catch (error) {
+              console.error('Erreur initialisation carte:', error);
+            }
+          }, 100);
+        }
       }
     }
 
@@ -144,17 +171,59 @@ const Navigation = {
   // Affiche les détails d'une session
   viewSessionDetails(sessionId) {
     const session = AppData.sessions.find(s => s.id === sessionId);
-    if (session) {
-      alert(`📋 ${session.name}\n\nLieu: ${session.location}\nPrises: ${session.catches}\nPoids: ${session.totalWeight} kg\nNotes: ${session.notes}`);
-    }
+    if (!session) return;
+
+    const catches = typeof getSessionCatches === 'function' ? getSessionCatches(sessionId) : [];
+    const totalWeight = catches.reduce((sum,c) => sum + (parseFloat(c.weight)||0), 0).toFixed(1);
+    const catchesHtml = catches.length ? catches.map(c => `
+      <div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #2a2a2a;">
+        ${c.photo ? `<img src="${c.photo}" style="width:56px;height:56px;border-radius:8px;object-fit:cover;">` : '<div style="width:56px;height:56px;border-radius:8px;background:#111;display:flex;align-items:center;justify-content:center;font-size:24px;">🐟</div>'}
+        <div style="flex:1;">
+          <div style="color:#fff;font-weight:700;">${c.species || 'Carpe'} — ${c.weight} kg</div>
+          <div style="font-size:11px;color:#999;">${c.date || ''} ${c.time || ''}</div>
+          <div style="font-size:11px;color:#777;">${c.bait || ''}</div>
+        </div>
+      </div>
+    `).join('') : '<div style="color:#777;padding:10px 0;">Aucune prise dans cette session.</div>';
+
+    openModal(`📋 ${session.name}`, `
+      <div style="display:grid;gap:10px;">
+        <div style="color:#ccc;">📍 ${session.location || ''}</div>
+        <div style="display:flex;gap:8px;">
+          <div style="flex:1;background:#111;padding:8px;border-radius:6px;text-align:center;"><b style="color:#D00000;">${catches.length}</b><div style="font-size:10px;color:#777;">prises</div></div>
+          <div style="flex:1;background:#111;padding:8px;border-radius:6px;text-align:center;"><b style="color:#D00000;">${totalWeight} kg</b><div style="font-size:10px;color:#777;">poids total</div></div>
+        </div>
+        <div style="font-weight:700;color:#fff;">Poissons de la session</div>
+        ${catchesHtml}
+        <div style="display:flex;gap:8px;">
+          ${session.status === 'active' ? `<button type="button" onclick="closeModal();setTimeout(()=>openAddCatchForm('${session.id}'),250)" style="flex:1;padding:10px;background:#D00000;color:#fff;border:none;border-radius:7px;">🐟 Ajouter une prise</button>` : ''}
+          <button type="button" onclick="closeModal();setTimeout(()=>openEditSessionForm('${session.id}'),250)" style="flex:1;padding:10px;background:#181818;color:#fff;border:1px solid #D00000;border-radius:7px;">✏️ Modifier</button>
+        </div>
+      </div>
+    `, () => true);
+
+    const modalButtons = document.querySelectorAll('#modal-backdrop button');
+    if (modalButtons.length >= 2) modalButtons[modalButtons.length - 2].style.display = 'none';
   },
 
   // Affiche les détails d'une prise
   viewCatchDetails(catchId) {
-    const catch_ = AppData.catches.find(c => c.id === catchId);
-    if (catch_) {
-      alert(`🐟 ${catch_.species}\n\nPoids: ${catch_.weight} kg\nLongueur: ${catch_.length} cm\nAppât: ${catch_.bait}\nMontage: ${catch_.rig}\nProfondeur: ${catch_.depth}m\nDistance: ${catch_.distance}m`);
-    }
+    const c = AppData.catches.find(c => c.id === catchId);
+    if (!c) return;
+    const session = c.sessionId ? AppData.sessions.find(s => s.id === c.sessionId) : null;
+    openModal(`🐟 ${c.species || 'Prise'}`, `
+      ${c.photo ? `<img src="${c.photo}" style="width:100%;max-height:280px;object-fit:cover;border-radius:10px;margin-bottom:12px;">` : ''}
+      <div style="display:grid;gap:7px;color:#ccc;font-size:13px;">
+        <div><b style="color:#fff;">Poids :</b> ${c.weight} kg</div>
+        <div><b style="color:#fff;">Longueur :</b> ${c.length || '—'} cm</div>
+        <div><b style="color:#fff;">Session :</b> ${session ? session.name : 'Aucune'}</div>
+        <div><b style="color:#fff;">Appât :</b> ${c.bait || '—'}</div>
+        <div><b style="color:#fff;">Montage :</b> ${c.rig || '—'}</div>
+      </div>
+    `, () => true);
+
+    const modalButtons = document.querySelectorAll('#modal-backdrop button');
+    if (modalButtons.length >= 2) modalButtons[modalButtons.length - 2].style.display = 'none';
   },
 
   // Affiche les détails d'un spot

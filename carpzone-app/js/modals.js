@@ -86,8 +86,9 @@ function openModal(title, content, onSave, onCancel) {
     cursor: pointer;
     transition: all 0.2s;
   `;
-  saveBtn.onclick = () => {
-    const formData = new FormData(document.querySelector('form'));
+  saveBtn.onclick = async () => {
+    const form = formContainer.querySelector('form');
+    const formData = new FormData(form);
     const data = Object.fromEntries(formData);
     
     // Validation
@@ -97,7 +98,8 @@ function openModal(title, content, onSave, onCancel) {
       return;
     }
     
-    if (onSave(data)) {
+    const saved = await onSave(data, form);
+    if (saved) {
       closeModal();
     }
   };
@@ -159,180 +161,182 @@ function validateForm(data) {
   return errors;
 }
 
+function compressImageFile(file, maxSize = 1280, quality = 0.78) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type || !file.type.startsWith('image/')) {
+      resolve('');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Impossible de lire la photo'));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Photo invalide'));
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        const scale = Math.min(1, maxSize / Math.max(width, height));
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 // ============================================
 // FORMULAIRES SPÉCIFIQUES
 // ============================================
 
-// FORMULAIRE : Ajouter une session
-function openAddSessionForm() {
-  const content = `
+// FORMULAIRE : Ajouter / modifier une session
+function getSessionFormContent(session = {}) {
+  const esc = value => String(value ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  return `
     <form style="display: grid; gap: 12px;">
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Nom de la session *</label>
-        <input type="text" name="name" placeholder="Ex: Session Créteil" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Nom de la session *</label>
+        <input type="text" name="name" value="${esc(session.name)}" required style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
       </div>
-      
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Lieu *</label>
-        <input type="text" name="location" placeholder="Ex: Lac de Créteil" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Lieu *</label>
+        <input type="text" name="location" value="${esc(session.location)}" required style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
       </div>
-      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Date début</label><input type="date" name="startDate" value="${esc(session.startDate)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Date fin</label><input type="date" name="endDate" value="${esc(session.endDate)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+      </div>
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Date de début</label>
-        <input type="date" name="startDate" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">État</label>
+        <select name="status" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
+          <option value="active" ${session.status !== 'completed' ? 'selected' : ''}>En cours</option>
+          <option value="completed" ${session.status === 'completed' ? 'selected' : ''}>Terminée</option>
+        </select>
       </div>
-      
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Date de fin</label>
-        <input type="date" name="endDate" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Air (°C)</label><input type="number" name="airTemp" value="${esc(session.airTemp)}" step="0.1" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Eau (°C)</label><input type="number" name="waterTemp" value="${esc(session.waterTemp)}" step="0.1" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
       </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Température de l'air (°C)</label>
-        <input type="number" name="airTemp" placeholder="24" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Pression (hPa)</label><input type="number" name="pressure" value="${esc(session.pressure)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Vent (km/h)</label><input type="number" name="windSpeed" value="${esc(session.windSpeed)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
       </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Température de l'eau (°C)</label>
-        <input type="number" name="waterTemp" placeholder="19" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Profondeur (m)</label><input type="number" name="depth" value="${esc(session.depth)}" step="0.1" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Distance (m)</label><input type="number" name="distance" value="${esc(session.distance)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
       </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Pression (mb)</label>
-        <input type="number" name="pressure" placeholder="1015" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Vent (km/h)</label>
-        <input type="number" name="windSpeed" placeholder="8" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Profondeur (m)</label>
-        <input type="number" name="depth" placeholder="2.5" step="0.1" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Distance de pêche (m)</label>
-        <input type="number" name="distance" placeholder="35" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Type de fond</label>
-        <input type="text" name="substrate" placeholder="Vase et graviers" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Commentaire</label>
-        <textarea name="notes" placeholder="Vos observations..." style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff; min-height: 80px; resize: none;"></textarea>
-      </div>
+      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Type de fond</label><input type="text" name="substrate" value="${esc(session.substrate)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Commentaire</label><textarea name="notes" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;min-height:80px;">${esc(session.notes)}</textarea></div>
     </form>
   `;
+}
 
-  openModal('+ Nouvelle Session', content, (data) => {
-    addSession({
-      name: data.name,
-      location: data.location,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      airTemp: data.airTemp,
-      waterTemp: data.waterTemp,
-      pressure: data.pressure,
-      windSpeed: data.windSpeed,
-      depth: data.depth,
-      distance: data.distance,
-      substrate: data.substrate,
-      notes: data.notes
-    });
+function sessionFormData(data) {
+  return {
+    name: data.name,
+    location: data.location,
+    startDate: data.startDate,
+    endDate: data.endDate,
+    status: data.status || 'active',
+    airTemp: data.airTemp,
+    waterTemp: data.waterTemp,
+    pressure: data.pressure,
+    windSpeed: data.windSpeed,
+    depth: data.depth,
+    distance: data.distance,
+    substrate: data.substrate,
+    notes: data.notes
+  };
+}
+
+function openAddSessionForm() {
+  openModal('+ Nouvelle Session', getSessionFormContent(), (data) => {
+    addSession(sessionFormData(data));
+    return true;
+  });
+}
+
+function openEditSessionForm(sessionId) {
+  const session = AppData.sessions.find(s => s.id === sessionId);
+  if (!session) return showNotification('Session introuvable');
+
+  openModal('✏️ Modifier la session', getSessionFormContent(session), (data) => {
+    updateSession(sessionId, sessionFormData(data));
+    recalculateSessionStats(sessionId);
+    saveAppData();
     return true;
   });
 }
 
 // FORMULAIRE : Ajouter une prise
-function openAddCatchForm() {
+function openAddCatchForm(preselectedSessionId = '') {
+  const sessions = AppData.sessions;
+  const activeSessions = sessions.filter(s => s.status === 'active');
+  const sessionOptions = sessions.map(s => `
+    <option value="${s.id}" ${s.id === preselectedSessionId ? 'selected' : ''}>${s.status === 'active' ? '🟢 ' : ''}${s.name} — ${s.location}</option>
+  `).join('');
+
   const content = `
-    <form style="display: grid; gap: 12px;">
+    <form style="display:grid;gap:12px;">
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Espèce *</label>
-        <input type="text" name="species" placeholder="Ex: Carpe commune" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Photo de la prise</label>
+        <input type="file" name="photoFile" accept="image/*" capture="environment" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
+        <small style="color:#666;">Prendre une photo ou choisir dans la photothèque.</small>
       </div>
-
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Poids (kg) *</label>
-        <input type="number" name="weight" placeholder="18.5" step="0.1" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Session liée</label>
+        <select name="sessionId" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
+          <option value="">Aucune session</option>${sessionOptions}
+        </select>
+        <small style="color:#777;">${activeSessions.length ? '🟢 = session en cours' : 'Aucune session en cours.'}</small>
       </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Longueur (cm)</label>
-        <input type="number" name="length" placeholder="68" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Espèce *</label><input type="text" name="species" value="Carpe" required style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Poids (kg) *</label><input type="number" name="weight" step="0.01" required style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Longueur (cm)</label><input type="number" name="length" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Date *</label><input type="date" name="date" value="${new Date().toISOString().split('T')[0]}" required style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Heure</label><input type="time" name="time" value="${new Date().toTimeString().slice(0,5)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
       </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Date *</label>
-        <input type="date" name="date" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Lieu</label><input type="text" name="location" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Appât</label><input type="text" name="bait" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Montage</label><input type="text" name="rig" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Profondeur (m)</label><input type="number" name="depth" step="0.1" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Distance (m)</label><input type="number" name="distance" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
       </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Heure</label>
-        <input type="time" name="time" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Lieu</label>
-        <input type="text" name="location" placeholder="Lac de Créteil" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Appât</label>
-        <input type="text" name="bait" placeholder="Bouillette" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Diamètre appât (mm)</label>
-        <input type="number" name="boilieSize" placeholder="20" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Couleur</label>
-        <input type="text" name="boilieColor" placeholder="Jaune/Orange" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Montage</label>
-        <input type="text" name="rig" placeholder="D-Rig" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Profondeur (m)</label>
-        <input type="number" name="depth" placeholder="2.5" step="0.1" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Distance (m)</label>
-        <input type="number" name="distance" placeholder="35" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Commentaire</label>
-        <textarea name="comment" placeholder="Vos observations..." style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff; min-height: 80px; resize: none;"></textarea>
-      </div>
+      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Commentaire</label><textarea name="comment" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;min-height:80px;"></textarea></div>
     </form>
   `;
 
-  openModal('🐟 Nouvelle Prise', content, (data) => {
+  openModal('🐟 Nouvelle Prise', content, async (data, form) => {
+    const fileInput = form.querySelector('input[name="photoFile"]');
+    const file = fileInput?.files?.[0];
+    let photo = '';
+    if (file) {
+      try { photo = await compressImageFile(file); }
+      catch (e) { console.error(e); showNotification('Photo non enregistrée'); }
+    }
+
+    const session = data.sessionId ? AppData.sessions.find(s => s.id === data.sessionId) : null;
     addCatch({
+      sessionId: data.sessionId || '',
+      photo,
       species: data.species,
       weight: parseFloat(data.weight),
-      length: data.length,
+      length: data.length ? parseFloat(data.length) : '',
       date: data.date,
       time: data.time,
-      location: data.location,
+      location: data.location || session?.location || '',
       bait: data.bait,
-      boilieSize: data.boilieSize,
-      boilieColor: data.boilieColor,
       rig: data.rig,
-      depth: parseFloat(data.depth),
-      distance: parseFloat(data.distance),
+      depth: data.depth ? parseFloat(data.depth) : '',
+      distance: data.distance ? parseFloat(data.distance) : '',
       comment: data.comment
     });
     return true;

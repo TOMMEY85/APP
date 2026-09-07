@@ -16,7 +16,21 @@ const App = {
     
     // Charger l'écran d'accueil
     this.loadHomeScreen();
-    
+
+    // Demander la position et charger la météo réelle au démarrage.
+    // Si le GPS est refusé, CARPZONE continue de fonctionner normalement.
+    if (typeof WeatherManager !== 'undefined') {
+      WeatherManager.fetchFromCurrentPosition({ silent: true })
+        .then((data) => {
+          if (data && typeof Navigation !== 'undefined' && Navigation.currentScreen === 'home') {
+            this.loadHomeScreen();
+          }
+        })
+        .catch((error) => {
+          console.warn('Météo/GPS non disponible au démarrage :', error);
+        });
+    }
+
     // Vérifier la compatibilité
     this.checkCompatibility();
     
@@ -55,6 +69,18 @@ const App = {
 
   useGPS() {
     Navigation.useGPS();
+  },
+
+  async refreshWeatherAndLocation() {
+    if (typeof WeatherManager === 'undefined') {
+      if (typeof showNotification === 'function') showNotification('Météo indisponible');
+      return;
+    }
+
+    const data = await WeatherManager.refreshFromGPS();
+    if (data && typeof Navigation !== 'undefined' && Navigation.currentScreen === 'home') {
+      this.loadHomeScreen();
+    }
   },
 
   useGPSForSpot() {
