@@ -7,15 +7,34 @@ const DataManager = {
   STORAGE_KEY: 'carpzone_data',
 
   load() {
+    const defaults = this.getDefaultData();
     try {
       const saved = localStorage.getItem(this.STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        const data = (parsed && typeof parsed === 'object') ? parsed : {};
+
+        // Migration sûre des anciennes versions : aucune donnée existante
+        // n'est supprimée, seules les propriétés manquantes sont recréées.
+        data.user = { ...defaults.user, ...(data.user || {}) };
+        data.user.stats = { ...defaults.user.stats, ...(data.user.stats || {}) };
+
+        ['sessions', 'catches', 'spots', 'baits', 'rigs', 'notes', 'badges'].forEach((key) => {
+          if (!Array.isArray(data[key])) data[key] = defaults[key];
+        });
+
+        data.settings = { ...defaults.settings, ...(data.settings || {}) };
+        data.settings.units = { ...defaults.settings.units, ...(data.settings.units || {}) };
+        data.settings.notifications = { ...defaults.settings.notifications, ...(data.settings.notifications || {}) };
+        data.settings.privacy = { ...defaults.settings.privacy, ...(data.settings.privacy || {}) };
+        data.settings.display = { ...defaults.settings.display, ...(data.settings.display || {}) };
+
+        return data;
       }
     } catch (e) {
       console.warn('Erreur localStorage:', e);
     }
-    return this.getDefaultData();
+    return defaults;
   },
 
   save(data) {
