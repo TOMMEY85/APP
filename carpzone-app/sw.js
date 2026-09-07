@@ -1,4 +1,4 @@
-const CACHE_NAME = 'carpzone-pwa-v1';
+const CACHE_NAME = 'carpzone-pwa-v2-openmeteo';
 const APP_SHELL = [
   './',
   './index.html',
@@ -9,6 +9,9 @@ const APP_SHELL = [
   './css/components.css',
   './css/animations.css',
   './data/app-data.js',
+  './js/weather.js',
+  './js/profile-manager.js',
+  './js/map-manager.js',
   './js/ui-generator.js',
   './js/modals.js',
   './js/navigation.js',
@@ -35,14 +38,17 @@ self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
 
-  // Same-origin app files: cache first, then network.
+  // Same-origin app files: network first so Netlify updates appear immediately,
+  // with cache fallback when the device is offline.
   if (url.origin === self.location.origin) {
     event.respondWith(
-      caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
-        return response;
-      }))
+      fetch(event.request)
+        .then(response => {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+          return response;
+        })
+        .catch(() => caches.match(event.request))
     );
     return;
   }

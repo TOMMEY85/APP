@@ -4,146 +4,235 @@
 // ============================================
 
 const UIGenerator = {
-  // Génère l'écran d'accueil
+  // Génère l'écran d'accueil amélioré
   generateHomeScreen() {
     const stats = getStatistics();
-    const session = AppData.sessions.find(s => s.status === 'active');
-    const recentCatches = AppData.catches.slice(0, 2);
-    const unlockedBadges = AppData.badges.filter(b => b.unlocked);
-
-    const html = `
-      <div class="home-screen">
-        <div class="logo-section">
-          <div class="logo">CARP<span class="logo-accent">ZONE</span></div>
-          <div class="slogan">Analyse. Prépare. Capture.</div>
+    const profile = UserProfile || ProfileManager.load();
+    const weather = WeatherManager.cache.data;
+    const nextSession = AppData.sessions.find(s => s.status === 'active') || AppData.sessions[0];
+    const recentCatches = AppData.catches.slice(0, 3);
+    
+    // Calculer l'indice d'activité
+    const activityScore = weather ? WeatherManager.calculateCarpActivityIndex() : 50;
+    const activityLevel = WeatherManager.getActivityLevel(activityScore);
+    
+    let html = `
+      <div class="home-screen" style="padding: 16px; background: #080808; color: #fff;">
+        
+        <!-- En-tête -->
+        <div style="text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #333;">
+          <div style="font-size: 28px; font-weight: bold;">CARPZONE</div>
+          <div style="font-size: 12px; color: #D00000; margin-top: 4px;">Analyse. Prépare. Capture.</div>
         </div>
-
-        <div class="welcome-text">Bienvenue ${AppData.user.name.split(' ')[0]} 🎣</div>
-
-        ${session ? `
-          <div class="stat-card">
-            <div class="stat-content">
-              <div class="stat-label">Prochaine session</div>
-              <div class="stat-value">${session.name}</div>
+        
+        <!-- Salutation -->
+        <div style="font-size: 18px; margin-bottom: 20px;">
+          👋 Bonjour ${profile.firstName} !
+        </div>
+    `;
+    
+    // Section Prochaine session
+    html += `
+      <div style="background: #1a1a1a; border: 2px solid #D00000; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+        <div style="font-size: 12px; color: #999; margin-bottom: 8px;">PROCHAINE SESSION</div>
+    `;
+    
+    if (nextSession) {
+      html += `
+        <div style="font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 4px;">${nextSession.name}</div>
+        <div style="font-size: 13px; color: #ccc; margin-bottom: 8px;">📍 ${nextSession.location}</div>
+        <div style="font-size: 12px; color: #999;">
+          ${nextSession.startDate ? nextSession.startDate : 'Date non définie'}
+        </div>
+        <button onclick="Navigation.switchScreen('sessions')" style="width: 100%; margin-top: 12px; padding: 8px; background: #D00000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">Voir la session</button>
+      `;
+    } else {
+      html += `
+        <div style="color: #999;">Aucune session programmée</div>
+        <button onclick="App.showAddMenu()" style="width: 100%; margin-top: 12px; padding: 8px; background: #D00000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">+ Nouvelle session</button>
+      `;
+    }
+    
+    html += `</div>`;
+    
+    // Section Météo
+    html += `
+      <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+        <div style="font-size: 12px; color: #999; margin-bottom: 8px;">🌤️ MÉTÉO ACTUELLE</div>
+    `;
+    
+    if (weather) {
+      const temp = Math.round(weather.temperature_2m);
+      const weatherDesc = WeatherManager.getWeatherDescription(weather.weather_code);
+      const weatherEmoji = WeatherManager.getWeatherEmoji(weather.weather_code);
+      const windDir = WeatherManager.getWindDirection(weather.wind_direction_10m);
+      const pressure = Math.round(weather.pressure_msl);
+      const pressureTrend = WeatherManager.getPressureTrend();
+      const humidity = weather.relative_humidity_2m;
+      
+      html += `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <div style="font-size: 32px;">${weatherEmoji}</div>
+            <div style="font-size: 28px; font-weight: bold; color: #D00000;">${temp}°C</div>
+            <div style="font-size: 12px; color: #999;">${weatherDesc}</div>
+          </div>
+          
+          <div>
+            <div style="font-size: 12px; color: #999; margin-bottom: 4px;">💨 Vent</div>
+            <div style="font-size: 16px; font-weight: 600;">${Math.round(weather.wind_speed_10m)} km/h</div>
+            <div style="font-size: 13px; color: #ccc;">Direction: ${windDir}</div>
+          </div>
+        </div>
+        
+        <div style="background: #0f0f0f; border-radius: 8px; padding: 8px; margin-bottom: 8px;">
+          <div style="font-size: 12px; color: #999;">📊 Pression: ${pressure} hPa ${pressureTrend}</div>
+          <div style="font-size: 11px; color: #666; margin-top: 4px;">${WeatherManager.getPressureHistory()}</div>
+        </div>
+        
+        <div style="display: flex; gap: 8px; font-size: 12px;">
+          <div style="flex: 1; background: #0f0f0f; padding: 6px; border-radius: 6px; text-align: center;">
+            <div style="color: #999;">💧</div>
+            <div style="color: #ccc;">${humidity}% humidité</div>
+          </div>
+          <div style="flex: 1; background: #0f0f0f; padding: 6px; border-radius: 6px; text-align: center;">
+            <div style="color: #999;">🌅</div>
+            <div style="color: #ccc;">${weather.sunrise ? weather.sunrise.slice(11, 16) : '--:--'}</div>
+          </div>
+          <div style="flex: 1; background: #0f0f0f; padding: 6px; border-radius: 6px; text-align: center;">
+            <div style="color: #999;">🌇</div>
+            <div style="color: #ccc;">${weather.sunset ? weather.sunset.slice(11, 16) : '--:--'}</div>
+          </div>
+        </div>
+        <button onclick="WeatherManager.refreshFromGPS()" style="width: 100%; margin-top: 10px; padding: 8px; background: #0f0f0f; color: #fff; border: 1px solid #D00000; border-radius: 6px; cursor: pointer; font-size: 12px;">
+          🔄 Actualiser la météo
+        </button>
+        <div style="margin-top: 6px; text-align: center; font-size: 10px; color: #666;">${lastUpdated}</div>
+      `;
+    } else {
+      html += `
+        <div style="color: #999; text-align: center; padding: 16px;">
+          <div style="margin-bottom: 10px;">Météo locale non chargée</div>
+          <button onclick="WeatherManager.refreshFromGPS()" style="padding: 9px 12px; background: #D00000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+            📍 Utiliser ma position
+          </button>
+          <br><small style="display:block; margin-top:8px;">CARPZONE reste utilisable si le GPS est refusé.</small>
+        </div>
+      `;
+    }
+    
+    html += `</div>`;
+    
+    // Indice d'activité de carpe
+    html += `
+      <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+        <div style="font-size: 12px; color: #999; margin-bottom: 8px;">🎣 CONDITIONS CARPE</div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="flex: 1;">
+            <div style="background: #0f0f0f; height: 8px; border-radius: 4px; overflow: hidden;">
+              <div style="background: linear-gradient(90deg, #D00000 0%, #D00000 100%); height: 100%; width: ${activityScore}%;" ></div>
             </div>
-            <div class="stat-icon">📅</div>
           </div>
-        ` : ''}
-
-        <div class="section-title">Conditions actuelles</div>
-        <div class="weather-grid">
-          <div class="mini-stat">
-            <div class="mini-label">Température</div>
-            <div class="mini-value">${AppData.weather.temperature}${AppData.settings.units.temperature}</div>
+          <div style="text-align: right;">
+            <div style="font-size: 16px; font-weight: 600; color: #D00000;">${activityScore}/100</div>
+            <div style="font-size: 12px; color: #999;">${activityLevel}</div>
           </div>
-          <div class="mini-stat">
-            <div class="mini-label">Ressenti</div>
-            <div class="mini-value">${AppData.weather.feelsLike}${AppData.settings.units.temperature}</div>
-          </div>
-          <div class="mini-stat">
-            <div class="mini-label">Vent</div>
-            <div class="mini-value">${AppData.weather.windSpeed} km/h</div>
-          </div>
-          <div class="mini-stat">
-            <div class="mini-label">Pression</div>
-            <div class="mini-value">${AppData.weather.pressure}mb</div>
-          </div>
-        </div>
-
-        <div class="moon-phase">
-          <div class="moon-icon">🌙</div>
-          <div class="moon-text">
-            <div class="moon-label">Phase lunaire</div>
-            <div class="moon-value">${AppData.weather.moonPhase}</div>
-          </div>
-        </div>
-
-        <div class="activity-section">
-          <div class="section-title">Indice d'activité carpe</div>
-          <div class="activity-meter">
-            <div class="activity-bar">
-              <div class="activity-fill" style="width: ${AppData.activityIndex.score}%"></div>
-            </div>
-            <div class="activity-label">
-              <span>${AppData.activityIndex.level} ${AppData.activityIndex.score}/100</span>
-              <span class="activity-status">CONDITIONS ${AppData.activityIndex.score > 60 ? 'FAVORABLES' : 'MOYENNES'}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="section-title">Dernières prises</div>
-        ${recentCatches.map(c => `
-          <div class="catch-item">
-            <div class="catch-thumb">🐟</div>
-            <div class="catch-info">
-              <div class="catch-name">${c.species}</div>
-              <div class="catch-meta">${this.formatDate(c.date)} • ${c.location}</div>
-            </div>
-            <div class="catch-weight">${c.weight} kg</div>
-          </div>
-        `).join('')}
-
-        <div class="section-title">Statistiques globales</div>
-        <div class="stat-card">
-          <div class="stat-content">
-            <div class="stat-label">Total de carpes</div>
-            <div class="stat-value">${stats.totalCatches}</div>
-          </div>
-          <div class="stat-icon">🎣</div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-content">
-            <div class="stat-label">Record personnel</div>
-            <div class="stat-value">${stats.personalRecord} kg</div>
-          </div>
-          <div class="stat-icon">🏆</div>
-        </div>
-
-        <button class="btn btn-primary" onclick="App.showAddMenu()">+ Nouvelle Session</button>
-
-        <div class="section-title" style="margin-top: 20px;">Badges débloqués</div>
-        <div class="badge-list">
-          ${AppData.badges.map(b => `
-            <div class="badge ${b.unlocked ? 'unlocked' : 'locked'}" title="${b.name}">
-              ${b.emoji}
-            </div>
-          `).join('')}
         </div>
       </div>
     `;
-
+    
+    // Dernières prises
+    if (recentCatches.length > 0) {
+      html += `
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 12px; color: #999; margin-bottom: 8px;">🐟 DERNIÈRES PRISES</div>
+      `;
+      
+      recentCatches.forEach(c => {
+        html += `
+          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px;">
+            <div style="font-size: 24px;">🐟</div>
+            <div style="flex: 1;">
+              <div style="font-weight: 600; color: #fff;">${c.species}</div>
+              <div style="font-size: 12px; color: #999;">${this.formatDate(c.date)} • ${c.location}</div>
+            </div>
+            <div style="font-size: 16px; font-weight: 600; color: #D00000;">${c.weight} kg</div>
+          </div>
+        `;
+      });
+      
+      html += `
+        <button onclick="Navigation.switchScreen('catches')" style="width: 100%; padding: 8px; background: #333; color: #ccc; border: 1px solid #555; border-radius: 6px; cursor: pointer; font-size: 12px;">Voir toutes les prises</button>
+        </div>
+      `;
+    }
+    
+    // Statistiques
+    html += `
+      <div style="margin-bottom: 16px;">
+        <div style="font-size: 12px; color: #999; margin-bottom: 8px;">📈 STATISTIQUES</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #D00000;">${stats.totalCatches}</div>
+            <div style="font-size: 11px; color: #999;">Prises totales</div>
+          </div>
+          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #D00000;">${stats.personalRecord} kg</div>
+            <div style="font-size: 11px; color: #999;">Record</div>
+          </div>
+          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #D00000;">${AppData.sessions.length}</div>
+            <div style="font-size: 11px; color: #999;">Sessions</div>
+          </div>
+          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #D00000;">${stats.averageWeight} kg</div>
+            <div style="font-size: 11px; color: #999;">Poids moyen</div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    html += `</div>`;
+    
     return html;
   },
+
 
   // Génère l'écran de la carte
   generateMapScreen() {
     const html = `
-      <div class="map-screen">
-        <div style="padding: 8px 0;">
-          <div class="section-title">Carte de pêche</div>
-          <div class="map-placeholder">🗺️</div>
-          <div class="map-controls">
-            <button class="map-btn" onclick="App.showAddSpotMenu()">+ Ajouter spot</button>
-            <button class="map-btn" onclick="App.useGPS()">Ma position</button>
-          </div>
+      <div class="map-screen" style="display: flex; flex-direction: column; height: 100%; background: #080808;">
+        <!-- Barre d'outils -->
+        <div style="padding: 12px; background: #1a1a1a; border-bottom: 1px solid #333; display: flex; gap: 8px; flex-wrap: wrap;">
+          <button onclick="MapManager.locateUser()" style="flex: 1; min-width: 100px; padding: 8px; background: #D00000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">📍 Me localiser</button>
+          <button onclick="MapManager.openAddSpotForm(48.8566, 2.3522)" style="flex: 1; min-width: 100px; padding: 8px; background: #333; color: #ccc; border: 1px solid #555; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">+ Ajouter spot</button>
         </div>
-
-        <div class="section-title">Spots enregistrés</div>
-        <div class="spot-list">
-          ${AppData.spots.map(spot => `
-            <div class="spot-item" onclick="App.viewSpotDetails('${spot.id}')">
-              <div class="spot-content">
-                <div class="spot-name">${spot.name}</div>
-                <div class="spot-meta">Profondeur: ${spot.depth}m • Distance: ${spot.distance}m</div>
-              </div>
-              <div class="spot-icon">📍</div>
+        
+        <!-- Carte Leaflet -->
+        <div id="map-container" style="flex: 1; background: #0a0a0a;"></div>
+        
+        <!-- Liste des spots -->
+        <div style="max-height: 30%; overflow-y: auto; background: #1a1a1a; border-top: 1px solid #333;">
+          <div style="padding: 12px; font-size: 12px; color: #999;">📍 SPOTS ENREGISTRÉS (${AppData.spots.length})</div>
+          ${AppData.spots.length > 0 ? AppData.spots.map(spot => `
+            <div style="background: #0f0f0f; border: 1px solid #333; border-radius: 6px; padding: 8px 12px; margin: 0 8px 8px 8px; cursor: pointer;" onclick="MapManager.locateSpot('${spot.id}')">
+              <div style="font-weight: 600; color: #fff; font-size: 12px;">${spot.name}</div>
+              <div style="font-size: 11px; color: #999;">${spot.lake}</div>
             </div>
-          `).join('')}
+          `).join('') : '<div style="padding: 12px; color: #666; text-align: center;">Cliquez sur la carte pour ajouter des spots</div>'}
         </div>
       </div>
+      
+      <script>
+        // Initialiser la carte quand l'écran se charge
+        setTimeout(() => {
+          if (!MapManager.map) {
+            MapManager.init('map-container');
+          }
+        }, 100);
+      </script>
     `;
-
+    
     return html;
   },
 
@@ -246,64 +335,79 @@ const UIGenerator = {
   // Génère l'écran du profil
   generateProfileScreen() {
     const stats = getStatistics();
+    const profile = UserProfile || ProfileManager.load();
     const unlockedBadges = AppData.badges.filter(b => b.unlocked).length;
 
     const html = `
-      <div class="profile-screen">
-        <div class="profile-header">
-          <div class="profile-avatar">${AppData.user.avatar}</div>
-          <div class="profile-name">${AppData.user.name}</div>
-          <div class="profile-bio">${AppData.user.bio}</div>
+      <div class="profile-screen" style="padding: 16px; background: #080808; color: #fff;">
+        
+        <!-- En-tête du profil -->
+        <div style="text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #333;">
+          <div style="font-size: 48px; margin-bottom: 12px;">${profile.avatar}</div>
+          <div style="font-size: 18px; font-weight: 600;">${profile.firstName} ${profile.lastName}</div>
+          <div style="font-size: 12px; color: #999; margin-top: 4px;">@${profile.username}</div>
+          <div style="font-size: 12px; color: #D00000; margin-top: 4px;">${profile.bio}</div>
+          <button onclick="ProfileManager.openEditForm()" style="width: 100%; margin-top: 12px; padding: 8px; background: #D00000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">✏️ Modifier mon profil</button>
         </div>
-
-        <div class="profile-stats">
-          <div class="profile-stat">
-            <div class="profile-stat-label">Sessions</div>
-            <div class="profile-stat-value">${stats.totalSessions}</div>
-          </div>
-          <div class="profile-stat">
-            <div class="profile-stat-label">Carpes</div>
-            <div class="profile-stat-value">${stats.totalCatches}</div>
-          </div>
-          <div class="profile-stat">
-            <div class="profile-stat-label">Poids total</div>
-            <div class="profile-stat-value">${stats.totalWeight}</div>
-          </div>
-          <div class="profile-stat">
-            <div class="profile-stat-label">Record</div>
-            <div class="profile-stat-value">${stats.personalRecord}</div>
-          </div>
-        </div>
-
-        <div class="profile-section-label">Badges & accomplissements</div>
-        <div class="badge-list" style="margin-bottom: 20px;">
-          ${AppData.badges.map(b => `
-            <div class="badge ${b.unlocked ? 'unlocked' : 'locked'}" title="${b.name}: ${b.description}">
-              ${b.emoji}
+        
+        <!-- Statistiques -->
+        <div style="margin-bottom: 24px;">
+          <div style="font-size: 12px; color: #999; margin-bottom: 8px;">📈 STATISTIQUES</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
+              <div style="font-size: 20px; font-weight: bold; color: #D00000;">${stats.totalSessions}</div>
+              <div style="font-size: 11px; color: #999;">Sessions</div>
             </div>
-          `).join('')}
+            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
+              <div style="font-size: 20px; font-weight: bold; color: #D00000;">${stats.totalCatches}</div>
+              <div style="font-size: 11px; color: #999;">Carpes</div>
+            </div>
+            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
+              <div style="font-size: 20px; font-weight: bold; color: #D00000;">${stats.totalWeight} kg</div>
+              <div style="font-size: 11px; color: #999;">Poids total</div>
+            </div>
+            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
+              <div style="font-size: 20px; font-weight: bold; color: #D00000;">${stats.personalRecord} kg</div>
+              <div style="font-size: 11px; color: #999;">Record</div>
+            </div>
+          </div>
         </div>
-
-        <div class="profile-section-label">Préférences</div>
-        <div style="background: #1a1a1a; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: 20px;">
-          <div style="font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Carpiste depuis ${new Date(AppData.user.joinDate).getFullYear()}</div>
-          <div style="font-size: 12px; color: var(--text-dark);">${AppData.user.bio}</div>
+        
+        <!-- Badges -->
+        <div style="margin-bottom: 24px;">
+          <div style="font-size: 12px; color: #999; margin-bottom: 8px;">🏆 BADGES (${unlockedBadges}/${AppData.badges.length})</div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+            ${AppData.badges.map(b => `
+              <div style="background: ${b.unlocked ? '#1a1a1a' : '#0f0f0f'}; border: 1px solid ${b.unlocked ? '#D00000' : '#333'}; border-radius: 8px; padding: 8px; text-align: center; cursor: pointer;" title="${b.name}">
+                <div style="font-size: 24px;">${b.emoji}</div>
+                <div style="font-size: 9px; color: ${b.unlocked ? '#D00000' : '#666'}; margin-top: 2px;">${b.unlocked ? '✓' : '🔒'}</div>
+              </div>
+            `).join('')}
+          </div>
         </div>
-
-        <div class="profile-section-label">Paramètres rapides</div>
-        <div class="option-list">
-          <div class="option-item">
-            <span class="option-item-label">Unités: ${AppData.settings.units.weight}/${AppData.settings.units.temperature}</span>
-            <span class="option-item-value">✓</span>
+        
+        <!-- Informations -->
+        <div style="margin-bottom: 24px;">
+          <div style="font-size: 12px; color: #999; margin-bottom: 8px;">ℹ️ INFORMATIONS</div>
+          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; font-size: 12px;">
+            <div style="margin-bottom: 8px;">
+              <span style="color: #999;">Inscrit depuis:</span>
+              <span style="color: #fff;">${new Date(profile.joinDate).toLocaleDateString('fr-FR')}</span>
+            </div>
+            <div style="margin-bottom: 8px;">
+              <span style="color: #999;">Moyenne par prise:</span>
+              <span style="color: #fff;">${stats.averageWeight} kg</span>
+            </div>
+            <div>
+              <span style="color: #999;">Données sauvegardées:</span>
+              <span style="color: #fff;">✓ Locales (private)</span>
+            </div>
           </div>
-          <div class="option-item">
-            <span class="option-item-label">Mode sombre</span>
-            <span class="option-item-value">${AppData.settings.display.darkMode ? '✓' : '✗'}</span>
-          </div>
-          <div class="option-item">
-            <span class="option-item-label">Notifications</span>
-            <span class="option-item-value">${AppData.settings.notifications.catchAlert ? 'ON' : 'OFF'}</span>
-          </div>
+        </div>
+        
+        <!-- Version -->
+        <div style="text-align: center; padding-top: 12px; border-top: 1px solid #333;">
+          <div style="font-size: 10px; color: #666;">CARPZONE v2.0 • Analyse. Prépare. Capture.</div>
         </div>
       </div>
     `;
