@@ -1,0 +1,57 @@
+# Configuration Netlify pour CARPZONE PWA
+# Dossier de publication: ./
+
+[build]
+  # Pas de commande de build nécessaire (application HTML/CSS/JS pur)
+  command = "echo 'Application statique - aucun build requis'"
+  publish = "./"
+
+# Redirection pour SPA - important pour la navigation en client-side
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers pour PWA et cache
+[[headers]]
+  for = "/"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache pour les fichiers statiques
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Service Worker - pas de cache
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Manifest - pas de cache
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Index.html - pas de cache (important pour les mises à jour)
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

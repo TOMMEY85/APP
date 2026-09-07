@@ -1,0 +1,502 @@
+/* ============================================
+   CARPZONE - Composants Réutilisables
+   ============================================ */
+
+/* ============================================
+   BOUTONS
+   ============================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+  outline: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-red-hover) 100%);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-md);
+  margin-top: var(--spacing-md);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  box-shadow: var(--shadow-sm);
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  background: #1a1a1a;
+  border: 1px solid var(--border-color);
+  color: var(--accent-red);
+}
+
+.btn-secondary:hover {
+  background: #2a2a2a;
+  border-color: var(--accent-red);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid transparent;
+}
+
+.btn-ghost:hover {
+  background: rgba(208, 0, 0, 0.1);
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+
+/* ============================================
+   CARTES STATISTIQUES
+   ============================================ */
+
+.stat-card {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+  border: 1px solid var(--accent-red);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all var(--transition-base);
+  animation: slideIn var(--transition-base);
+}
+
+.stat-card:hover {
+  border-color: var(--accent-red-light);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent-red);
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-icon {
+  font-size: 28px;
+  color: var(--accent-red);
+  opacity: 0.3;
+  margin-left: 12px;
+}
+
+/* ============================================
+   MINI STATISTIQUES
+   ============================================ */
+
+.weather-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.mini-stat {
+  background: #1a1a1a;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  text-align: center;
+  transition: all var(--transition-base);
+}
+
+.mini-stat:hover {
+  border-color: var(--accent-red);
+  background: #2a2a2a;
+}
+
+.mini-label {
+  font-size: 10px;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.mini-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent-red);
+}
+
+/* ============================================
+   PHASE LUNAIRE
+   ============================================ */
+
+.moon-phase {
+  background: #1a1a1a;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  transition: all var(--transition-base);
+}
+
+.moon-phase:hover {
+  border-color: var(--accent-red);
+  background: #2a2a2a;
+}
+
+.moon-icon {
+  font-size: 24px;
+}
+
+.moon-text {
+  flex: 1;
+}
+
+.moon-label {
+  font-size: 10px;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.moon-value {
+  font-size: 13px;
+  color: var(--accent-red);
+  font-weight: 600;
+}
+
+/* ============================================
+   INDICE D'ACTIVITÉ
+   ============================================ */
+
+.activity-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.activity-meter {
+  background: #1a1a1a;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  transition: all var(--transition-base);
+}
+
+.activity-meter:hover {
+  border-color: var(--accent-red);
+}
+
+.activity-bar {
+  width: 100%;
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.activity-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-red) 0%, var(--accent-red-light) 100%);
+  width: 72%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.activity-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.activity-status {
+  color: var(--accent-red);
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/* ============================================
+   PRISES (CATCHES)
+   ============================================ */
+
+.catch-item {
+  background: #1a1a1a;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  transition: all var(--transition-base);
+  animation: slideIn var(--transition-base);
+}
+
+.catch-item:hover {
+  border-color: var(--accent-red);
+  background: #2a2a2a;
+  transform: translateX(4px);
+}
+
+.catch-thumb {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--accent-red) 0%, #800000 100%);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.catch-info {
+  flex: 1;
+}
+
+.catch-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.catch-meta {
+  font-size: 11px;
+  color: var(--text-dark);
+}
+
+.catch-weight {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-red);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ============================================
+   BADGES
+   ============================================ */
+
+.badge-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: var(--spacing-lg);
+}
+
+.badge {
+  background: #1a1a1a;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  text-align: center;
+  font-size: 18px;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.badge.locked {
+  opacity: 0.4;
+  filter: grayscale(100%);
+}
+
+.badge.unlocked {
+  border-color: var(--accent-red);
+  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+  box-shadow: 0 0 12px rgba(208, 0, 0, 0.2);
+}
+
+/* ============================================
+   SPOTS DE PÊCHE
+   ============================================ */
+
+.spot-item {
+  background: #1a1a1a;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all var(--transition-base);
+  animation: slideIn var(--transition-base);
+}
+
+.spot-item:hover {
+  border-color: var(--accent-red);
+  background: #2a2a2a;
+  transform: translateX(4px);
+}
+
+.spot-content {
+  flex: 1;
+}
+
+.spot-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.spot-meta {
+  font-size: 11px;
+  color: var(--text-dark);
+}
+
+.spot-icon {
+  font-size: 16px;
+  color: var(--accent-red);
+  margin-left: 12px;
+}
+
+/* ============================================
+   LISTES D'OPTIONS
+   ============================================ */
+
+.option-list {
+  background: #1a1a1a;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.option-item {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  transition: all var(--transition-fast);
+}
+
+.option-item:last-child {
+  border-bottom: none;
+}
+
+.option-item:hover {
+  background: #2a2a2a;
+}
+
+.option-item-label {
+  color: var(--text-secondary);
+}
+
+.option-item-value {
+  color: var(--accent-red);
+  font-weight: 600;
+}
+
+/* ============================================
+   INPUTS & FORMULAIRES
+   ============================================ */
+
+input,
+textarea,
+select {
+  background: #1a1a1a;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  padding: var(--spacing-md);
+  font-size: 14px;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+}
+
+input:hover,
+textarea:hover,
+select:hover {
+  border-color: var(--accent-red);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent-red);
+  box-shadow: 0 0 8px rgba(208, 0, 0, 0.2);
+}
+
+input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ============================================
+   LOADERS & SPINNERS
+   ============================================ */
+
+.loader {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--border-color);
+  border-radius: 50%;
+  border-top-color: var(--accent-red);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
