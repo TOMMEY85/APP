@@ -1,4 +1,4 @@
-const CACHE_NAME = 'carpzone-pwa-v6-account-cloud';
+const CACHE_NAME = 'carpzone-pwa-v7-cache-reset';
 const APP_SHELL = [
   './',
   './index.html',
