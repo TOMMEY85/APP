@@ -10,14 +10,14 @@ function showNotification(message) {
     position: fixed;
     top: 20px;
     right: 20px;
-    background: #D00000;
+    background: #b7cc85;
     color: #fff;
     padding: 12px 20px;
     border-radius: 8px;
     font-weight: 600;
     z-index: 2000;
     animation: slideIn 0.3s ease;
-    box-shadow: 0 4px 12px rgba(208, 0, 0, 0.4);
+    box-shadow: 0 4px 12px rgba(130, 157, 100, 0.4);
   `;
   notification.textContent = message;
   document.body.appendChild(notification);
@@ -46,8 +46,8 @@ function openModal(title, content, onSave, onCancel) {
 
   const modal = document.createElement('div');
   modal.style.cssText = `
-    background: #1a1a1a;
-    border: 2px solid #D00000;
+    background: #1a3028;
+    border: 2px solid #b7cc85;
     border-radius: 12px;
     padding: 24px;
     width: 90%;
@@ -77,7 +77,7 @@ function openModal(title, content, onSave, onCancel) {
   saveBtn.textContent = 'Enregistrer';
   saveBtn.style.cssText = `
     flex: 1;
-    background: linear-gradient(135deg, #D00000 0%, #a00000 100%);
+    background: linear-gradient(135deg, #b7cc85 0%, #8ca963 100%);
     color: #fff;
     border: none;
     padding: 12px;
@@ -108,9 +108,9 @@ function openModal(title, content, onSave, onCancel) {
   cancelBtn.textContent = 'Annuler';
   cancelBtn.style.cssText = `
     flex: 1;
-    background: #333;
-    color: #ccc;
-    border: 1px solid #555;
+    background: #365046;
+    color: #ccd4c8;
+    border: 1px solid #52695d;
     padding: 12px;
     border-radius: 8px;
     font-weight: 600;
@@ -201,38 +201,38 @@ function getSessionFormContent(session = {}) {
   return `
     <form style="display: grid; gap: 12px;">
       <div>
-        <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Nom de la session *</label>
-        <input type="text" name="name" value="${esc(session.name)}" required style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
+        <label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Nom de la session *</label>
+        <input type="text" name="name" value="${esc(session.name)}" required style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;">
       </div>
       <div>
-        <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Lieu *</label>
-        <input type="text" name="location" value="${esc(session.location)}" required style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
+        <label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Lieu *</label>
+        <input type="text" name="location" value="${esc(session.location)}" required style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;">
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Date début</label><input type="date" name="startDate" value="${esc(session.startDate)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Date fin</label><input type="date" name="endDate" value="${esc(session.endDate)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Date début</label><input type="date" name="startDate" value="${esc(session.startDate)}" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Date fin</label><input type="date" name="endDate" value="${esc(session.endDate)}" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
       </div>
       <div>
-        <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">État</label>
-        <select name="status" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
+        <label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">État</label>
+        <select name="status" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;">
           <option value="active" ${session.status !== 'completed' ? 'selected' : ''}>En cours</option>
           <option value="completed" ${session.status === 'completed' ? 'selected' : ''}>Terminée</option>
         </select>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Air (°C)</label><input type="number" name="airTemp" value="${esc(session.airTemp)}" step="0.1" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Eau (°C)</label><input type="number" name="waterTemp" value="${esc(session.waterTemp)}" step="0.1" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Air (°C)</label><input type="number" name="airTemp" value="${esc(session.airTemp)}" step="0.1" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Eau (°C)</label><input type="number" name="waterTemp" value="${esc(session.waterTemp)}" step="0.1" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Pression (hPa)</label><input type="number" name="pressure" value="${esc(session.pressure)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Vent (km/h)</label><input type="number" name="windSpeed" value="${esc(session.windSpeed)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Pression (hPa)</label><input type="number" name="pressure" value="${esc(session.pressure)}" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Vent (km/h)</label><input type="number" name="windSpeed" value="${esc(session.windSpeed)}" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Profondeur (m)</label><input type="number" name="depth" value="${esc(session.depth)}" step="0.1" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Distance (m)</label><input type="number" name="distance" value="${esc(session.distance)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Profondeur (m)</label><input type="number" name="depth" value="${esc(session.depth)}" step="0.1" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Distance (m)</label><input type="number" name="distance" value="${esc(session.distance)}" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
       </div>
-      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Type de fond</label><input type="text" name="substrate" value="${esc(session.substrate)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
-      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Commentaire</label><textarea name="notes" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;min-height:80px;">${esc(session.notes)}</textarea></div>
+      <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Type de fond</label><input type="text" name="substrate" value="${esc(session.substrate)}" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Commentaire</label><textarea name="notes" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;min-height:80px;">${esc(session.notes)}</textarea></div>
     </form>
   `;
 }
@@ -285,32 +285,32 @@ function openAddCatchForm(preselectedSessionId = '') {
   const content = `
     <form style="display:grid;gap:12px;">
       <div>
-        <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Photo de la prise</label>
-        <input type="file" name="photoFile" accept="image/*" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
-        <small style="color:#666;">Choisir une photo dans la photothèque ou utiliser l’appareil photo.</small>
+        <label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Photo de la prise</label>
+        <input type="file" name="photoFile" accept="image/*" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;">
+        <small style="color:#94a69b;">Choisir une photo dans la photothèque ou utiliser l’appareil photo.</small>
       </div>
       <div>
-        <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Session liée</label>
-        <select name="sessionId" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
+        <label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Session liée</label>
+        <select name="sessionId" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;">
           <option value="">Aucune session</option>${sessionOptions}
         </select>
-        <small style="color:#777;">${activeSessions.length ? '🟢 = session en cours' : 'Aucune session en cours.'}</small>
+        <small style="color:#94a69b;">${activeSessions.length ? '🟢 = session en cours' : 'Aucune session en cours.'}</small>
       </div>
-      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Espèce *</label><input type="text" name="species" value="Carpe" required style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
-      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Poids (kg) *</label><input type="number" name="weight" step="0.01" required style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
-      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Longueur (cm)</label><input type="number" name="length" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Espèce *</label><input type="text" name="species" value="Carpe" required style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Poids (kg) *</label><input type="number" name="weight" step="0.01" required style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Longueur (cm)</label><input type="number" name="length" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Date *</label><input type="date" name="date" value="${new Date().toISOString().split('T')[0]}" required style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Heure</label><input type="time" name="time" value="${new Date().toTimeString().slice(0,5)}" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Date *</label><input type="date" name="date" value="${new Date().toISOString().split('T')[0]}" required style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Heure</label><input type="time" name="time" value="${new Date().toTimeString().slice(0,5)}" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
       </div>
-      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Lieu</label><input type="text" name="location" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
-      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Appât</label><input type="text" name="bait" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
-      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Montage</label><input type="text" name="rig" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Lieu</label><input type="text" name="location" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Appât</label><input type="text" name="bait" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
+      <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Montage</label><input type="text" name="rig" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Profondeur (m)</label><input type="number" name="depth" step="0.1" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
-        <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Distance (m)</label><input type="number" name="distance" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Profondeur (m)</label><input type="number" name="depth" step="0.1" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
+        <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Distance (m)</label><input type="number" name="distance" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;"></div>
       </div>
-      <div><label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Commentaire</label><textarea name="comment" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;min-height:80px;"></textarea></div>
+      <div><label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Commentaire</label><textarea name="comment" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;min-height:80px;"></textarea></div>
     </form>
   `;
 
@@ -348,45 +348,45 @@ function openAddSpotForm() {
   const content = `
     <form style="display: grid; gap: 12px;">
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Nom du spot *</label>
-        <input type="text" name="name" placeholder="Nouveau spot" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Nom du spot *</label>
+        <input type="text" name="name" placeholder="Nouveau spot" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Lac/Plan d'eau *</label>
-        <input type="text" name="lake" placeholder="Lac de Créteil" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Lac/Plan d'eau *</label>
+        <input type="text" name="lake" placeholder="Lac de Créteil" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
-      <button type="button" onclick="App.useGPSForSpot()" style="width: 100%; padding: 10px; background: #D00000; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">📍 Utiliser ma position</button>
+      <button type="button" onclick="App.useGPSForSpot()" style="width: 100%; padding: 10px; background: #b7cc85; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">📍 Utiliser ma position</button>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Latitude</label>
-        <input type="number" name="latitude" placeholder="48.777" step="0.001" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
-      </div>
-
-      <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Longitude</label>
-        <input type="number" name="longitude" placeholder="2.434" step="0.001" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Latitude</label>
+        <input type="number" name="latitude" placeholder="48.777" step="0.001" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Profondeur (m)</label>
-        <input type="number" name="depth" placeholder="4.2" step="0.1" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Longitude</label>
+        <input type="number" name="longitude" placeholder="2.434" step="0.001" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Type de fond</label>
-        <input type="text" name="substrate" placeholder="Vase et graviers" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Profondeur (m)</label>
+        <input type="number" name="depth" placeholder="4.2" step="0.1" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Distance (m)</label>
-        <input type="number" name="distance" placeholder="35" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Type de fond</label>
+        <input type="text" name="substrate" placeholder="Vase et graviers" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Commentaire</label>
-        <textarea name="notes" placeholder="Vos observations..." style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff; min-height: 80px; resize: none;"></textarea>
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Distance (m)</label>
+        <input type="number" name="distance" placeholder="35" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
+      </div>
+
+      <div>
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Commentaire</label>
+        <textarea name="notes" placeholder="Vos observations..." style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff; min-height: 80px; resize: none;"></textarea>
       </div>
     </form>
   `;
@@ -411,18 +411,18 @@ function openAddBaitForm() {
   const content = `
     <form style="display: grid; gap: 12px;">
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Nom *</label>
-        <input type="text" name="name" placeholder="Bouillette Cranberry" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Nom *</label>
+        <input type="text" name="name" placeholder="Bouillette Cranberry" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Marque</label>
-        <input type="text" name="brand" placeholder="Dynamite Baits" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Marque</label>
+        <input type="text" name="brand" placeholder="Dynamite Baits" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Type</label>
-        <select name="type" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Type</label>
+        <select name="type" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
           <option value="">Sélectionner...</option>
           <option value="Bouillette">Bouillette</option>
           <option value="Pop-up">Pop-up</option>
@@ -435,23 +435,23 @@ function openAddBaitForm() {
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Parfum/Saveur</label>
-        <input type="text" name="flavor" placeholder="Cranberry" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Parfum/Saveur</label>
+        <input type="text" name="flavor" placeholder="Cranberry" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Diamètre (mm)</label>
-        <input type="number" name="diameter" placeholder="20" step="0.5" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Diamètre (mm)</label>
+        <input type="number" name="diameter" placeholder="20" step="0.5" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Couleur</label>
-        <input type="text" name="color" placeholder="Jaune/Orange" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Couleur</label>
+        <input type="text" name="color" placeholder="Jaune/Orange" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Commentaire</label>
-        <textarea name="notes" placeholder="Vos observations..." style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff; min-height: 80px; resize: none;"></textarea>
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Commentaire</label>
+        <textarea name="notes" placeholder="Vos observations..." style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff; min-height: 80px; resize: none;"></textarea>
       </div>
     </form>
   `;
@@ -475,13 +475,13 @@ function openAddNoteForm() {
   const content = `
     <form style="display: grid; gap: 12px;">
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Titre *</label>
-        <input type="text" name="title" placeholder="Titre de la note" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Titre *</label>
+        <input type="text" name="title" placeholder="Titre de la note" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
       </div>
 
       <div>
-        <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Texte *</label>
-        <textarea name="content" placeholder="Votre note..." style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff; min-height: 150px; resize: none;"></textarea>
+        <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Texte *</label>
+        <textarea name="content" placeholder="Votre note..." style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff; min-height: 150px; resize: none;"></textarea>
       </div>
     </form>
   `;

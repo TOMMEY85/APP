@@ -50,7 +50,7 @@ const MapManager = {
         } else {
           this.userMarker = L.circleMarker([latitude, longitude], {
             radius: 8,
-            fillColor: '#D00000',
+            fillColor: '#b7cc85',
             color: '#fff',
             weight: 2,
             opacity: 1,
@@ -97,13 +97,13 @@ const MapManager = {
       <div style="color: #000; min-width: 150px;">
         <strong>${icon} ${spot.name}</strong><br>
         ${spot.lake}<br>
-        <small style="color: #666;">
+        <small style="color: #94a69b;">
           ${spot.depth ? 'Profondeur: ' + spot.depth + 'm<br>' : ''}
           ${spot.substrate ? 'Fond: ' + spot.substrate + '<br>' : ''}
           ${spot.distance ? 'Distance: ' + spot.distance + 'm<br>' : ''}
         </small>
-        <button onclick="MapManager.editSpot('${spot.id}')" style="margin-top: 8px; padding: 4px 8px; background: #D00000; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">Modifier</button>
-        <button onclick="MapManager.deleteSpot('${spot.id}')" style="margin-left: 4px; padding: 4px 8px; background: #333; color: #ccc; border: 1px solid #555; border-radius: 4px; cursor: pointer; font-size: 11px;">Supprimer</button>
+        <button onclick="MapManager.editSpot('${spot.id}')" style="margin-top: 8px; padding: 4px 8px; background: #b7cc85; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">Modifier</button>
+        <button onclick="MapManager.deleteSpot('${spot.id}')" style="margin-left: 4px; padding: 4px 8px; background: #365046; color: #ccd4c8; border: 1px solid #52695d; border-radius: 4px; cursor: pointer; font-size: 11px;">Supprimer</button>
       </div>
     `;
     
@@ -141,18 +141,18 @@ const MapManager = {
         <input type="hidden" name="longitude" value="${lng}">
         
         <div>
-          <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Nom du spot *</label>
-          <input type="text" name="name" placeholder="Nom du spot" required style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+          <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Nom du spot *</label>
+          <input type="text" name="name" placeholder="Nom du spot" required style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
         </div>
         
         <div>
-          <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Lac / Rivière</label>
-          <input type="text" name="lake" placeholder="Lac de..." style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+          <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Lac / Rivière</label>
+          <input type="text" name="lake" placeholder="Lac de..." style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
         </div>
         
         <div>
-          <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Type de spot</label>
-          <select name="type" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+          <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Type de spot</label>
+          <select name="type" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
             <option value="poste">🎣 Poste</option>
             <option value="passage">🐟 Zone de passage</option>
             <option value="herbiers">🌿 Herbiers</option>
@@ -164,8 +164,8 @@ const MapManager = {
         </div>
         
         <div>
-          <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Type de fond</label>
-          <select name="substrate" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+          <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Type de fond</label>
+          <select name="substrate" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
             <option value="">Sélectionner...</option>
             <option value="Vase">Vase</option>
             <option value="Sable">Sable</option>
@@ -178,18 +178,18 @@ const MapManager = {
         </div>
         
         <div>
-          <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Profondeur (m)</label>
-          <input type="number" name="depth" placeholder="3.5" step="0.1" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+          <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Profondeur (m)</label>
+          <input type="number" name="depth" placeholder="3.5" step="0.1" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
         </div>
         
         <div>
-          <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Distance (m)</label>
-          <input type="number" name="distance" placeholder="40" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+          <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Distance (m)</label>
+          <input type="number" name="distance" placeholder="40" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
         </div>
         
         <div>
-          <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Commentaire</label>
-          <textarea name="notes" placeholder="Observations..." style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff; min-height: 80px; resize: none;"></textarea>
+          <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Commentaire</label>
+          <textarea name="notes" placeholder="Observations..." style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff; min-height: 80px; resize: none;"></textarea>
         </div>
       </form>
     `;

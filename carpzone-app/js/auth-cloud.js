@@ -205,20 +205,20 @@ function openAccountModal(mode = 'signin') {
       </div>
 
       <div>
-        <label style="display:block;color:#999;font-size:12px;margin-bottom:4px;">Email</label>
+        <label style="display:block;color:#a6b5a9;font-size:12px;margin-bottom:4px;">Email</label>
         <input type="email" name="email" required autocomplete="email"
-          style="width:100%;padding:11px;background:#0f0f0f;color:#fff;border:1px solid #333;border-radius:7px;">
+          style="width:100%;padding:11px;background:#14271f;color:#fff;border:1px solid #365046;border-radius:7px;">
       </div>
 
       <div>
-        <label style="display:block;color:#999;font-size:12px;margin-bottom:4px;">Mot de passe</label>
+        <label style="display:block;color:#a6b5a9;font-size:12px;margin-bottom:4px;">Mot de passe</label>
         <input type="password" name="password" required minlength="6"
           autocomplete="${isSignup ? 'new-password' : 'current-password'}"
-          style="width:100%;padding:11px;background:#0f0f0f;color:#fff;border:1px solid #333;border-radius:7px;">
-        <small style="color:#666;">6 caractères minimum.</small>
+          style="width:100%;padding:11px;background:#14271f;color:#fff;border:1px solid #365046;border-radius:7px;">
+        <small style="color:#94a69b;">6 caractères minimum.</small>
       </div>
 
-      <div style="font-size:11px;color:#777;line-height:1.4;">
+      <div style="font-size:11px;color:#94a69b;line-height:1.4;">
         Vos sessions, prises, spots, appâts et réglages pourront être retrouvés après connexion sur un autre appareil.
       </div>
     </form>
@@ -226,7 +226,7 @@ function openAccountModal(mode = 'signin') {
     <div style="margin-top:12px;text-align:center;">
       <button type="button"
         onclick="closeModal();setTimeout(()=>openAccountModal('${isSignup ? 'signin' : 'signup'}'),250)"
-        style="background:none;border:none;color:#D00000;font-size:12px;cursor:pointer;">
+        style="background:none;border:none;color:#b7cc85;font-size:12px;cursor:pointer;">
         ${isSignup ? 'Déjà un compte ? Se connecter' : 'Pas encore de compte ? Créer un compte'}
       </button>
       ${!isSignup ? `

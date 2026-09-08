@@ -61,7 +61,7 @@ const Navigation = {
               if (!container) return;
 
               if (typeof L === 'undefined') {
-                container.innerHTML = '<div style="padding:20px;color:#999;text-align:center;">Carte indisponible : Leaflet ne s\'est pas chargé.</div>';
+                container.innerHTML = '<div style="padding:20px;color:#a6b5a9;text-align:center;">Carte indisponible : Leaflet ne s\'est pas chargé.</div>';
                 return;
               }
 
@@ -124,14 +124,14 @@ const Navigation = {
 
     let html = `
       <div class="add-menu-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000;" onclick="this.remove()">
-        <div style="background: #1a1a1a; border: 2px solid var(--accent-red); border-radius: 16px; padding: 20px; width: 90%; max-width: 300px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);" onclick="event.stopPropagation()">
+        <div style="background: #1a3028; border: 2px solid var(--accent-red); border-radius: 16px; padding: 20px; width: 90%; max-width: 300px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);" onclick="event.stopPropagation()">
           <h3 style="color: var(--text-primary); margin-bottom: 16px; text-align: center; font-size: 16px;">Ajouter</h3>
           <div style="display: grid; gap: 8px;">
     `;
 
     options.forEach(opt => {
       html += `
-        <button style="background: #0f0f0f; border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;" onmouseover="this.style.background='#2a2a2a'; this.style.borderColor='var(--accent-red)'" onmouseout="this.style.background='#0f0f0f'; this.style.borderColor='var(--border-color)'" onclick="Navigation.${opt.action}(); this.closest('.add-menu-overlay').remove()">
+        <button style="background: #14271f; border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;" onmouseover="this.style.background='#254136'; this.style.borderColor='var(--accent-red)'" onmouseout="this.style.background='#14271f'; this.style.borderColor='var(--border-color)'" onclick="Navigation.${opt.action}(); this.closest('.add-menu-overlay').remove()">
           <span style="font-size: 18px;">${opt.icon}</span>
           ${opt.label}
         </button>
@@ -176,28 +176,28 @@ const Navigation = {
     const catches = typeof getSessionCatches === 'function' ? getSessionCatches(sessionId) : [];
     const totalWeight = catches.reduce((sum,c) => sum + (parseFloat(c.weight)||0), 0).toFixed(1);
     const catchesHtml = catches.length ? catches.map(c => `
-      <div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #2a2a2a;">
+      <div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #254136;">
         ${c.photo ? `<img src="${c.photo}" style="width:56px;height:56px;border-radius:8px;object-fit:cover;">` : '<div style="width:56px;height:56px;border-radius:8px;background:#111;display:flex;align-items:center;justify-content:center;font-size:24px;">🐟</div>'}
         <div style="flex:1;">
           <div style="color:#fff;font-weight:700;">${c.species || 'Carpe'} — ${c.weight} kg</div>
-          <div style="font-size:11px;color:#999;">${c.date || ''} ${c.time || ''}</div>
-          <div style="font-size:11px;color:#777;">${c.bait || ''}</div>
+          <div style="font-size:11px;color:#a6b5a9;">${c.date || ''} ${c.time || ''}</div>
+          <div style="font-size:11px;color:#94a69b;">${c.bait || ''}</div>
         </div>
       </div>
-    `).join('') : '<div style="color:#777;padding:10px 0;">Aucune prise dans cette session.</div>';
+    `).join('') : '<div style="color:#94a69b;padding:10px 0;">Aucune prise dans cette session.</div>';
 
     openModal(`📋 ${session.name}`, `
       <div style="display:grid;gap:10px;">
-        <div style="color:#ccc;">📍 ${session.location || ''}</div>
+        <div style="color:#ccd4c8;">📍 ${session.location || ''}</div>
         <div style="display:flex;gap:8px;">
-          <div style="flex:1;background:#111;padding:8px;border-radius:6px;text-align:center;"><b style="color:#D00000;">${catches.length}</b><div style="font-size:10px;color:#777;">prises</div></div>
-          <div style="flex:1;background:#111;padding:8px;border-radius:6px;text-align:center;"><b style="color:#D00000;">${totalWeight} kg</b><div style="font-size:10px;color:#777;">poids total</div></div>
+          <div style="flex:1;background:#111;padding:8px;border-radius:6px;text-align:center;"><b style="color:#b7cc85;">${catches.length}</b><div style="font-size:10px;color:#94a69b;">prises</div></div>
+          <div style="flex:1;background:#111;padding:8px;border-radius:6px;text-align:center;"><b style="color:#b7cc85;">${totalWeight} kg</b><div style="font-size:10px;color:#94a69b;">poids total</div></div>
         </div>
         <div style="font-weight:700;color:#fff;">Poissons de la session</div>
         ${catchesHtml}
         <div style="display:flex;gap:8px;">
-          ${session.status === 'active' ? `<button type="button" onclick="closeModal();setTimeout(()=>openAddCatchForm('${session.id}'),250)" style="flex:1;padding:10px;background:#D00000;color:#fff;border:none;border-radius:7px;">🐟 Ajouter une prise</button>` : ''}
-          <button type="button" onclick="closeModal();setTimeout(()=>openEditSessionForm('${session.id}'),250)" style="flex:1;padding:10px;background:#181818;color:#fff;border:1px solid #D00000;border-radius:7px;">✏️ Modifier</button>
+          ${session.status === 'active' ? `<button type="button" onclick="closeModal();setTimeout(()=>openAddCatchForm('${session.id}'),250)" style="flex:1;padding:10px;background:#b7cc85;color:#fff;border:none;border-radius:7px;">🐟 Ajouter une prise</button>` : ''}
+          <button type="button" onclick="closeModal();setTimeout(()=>openEditSessionForm('${session.id}'),250)" style="flex:1;padding:10px;background:#181818;color:#fff;border:1px solid #b7cc85;border-radius:7px;">✏️ Modifier</button>
         </div>
       </div>
     `, () => true);
@@ -213,7 +213,7 @@ const Navigation = {
     const session = c.sessionId ? AppData.sessions.find(s => s.id === c.sessionId) : null;
     openModal(`🐟 ${c.species || 'Prise'}`, `
       ${c.photo ? `<img src="${c.photo}" style="width:100%;max-height:280px;object-fit:cover;border-radius:10px;margin-bottom:12px;">` : ''}
-      <div style="display:grid;gap:7px;color:#ccc;font-size:13px;">
+      <div style="display:grid;gap:7px;color:#ccd4c8;font-size:13px;">
         <div><b style="color:#fff;">Poids :</b> ${c.weight} kg</div>
         <div><b style="color:#fff;">Longueur :</b> ${c.length || '—'} cm</div>
         <div><b style="color:#fff;">Session :</b> ${session ? session.name : 'Aucune'}</div>

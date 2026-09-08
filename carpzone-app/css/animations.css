@@ -49,10 +49,10 @@
 /* Glow - Lueur luminescente */
 @keyframes glow {
   0%, 100% {
-    box-shadow: 0 0 12px rgba(208, 0, 0, 0.3);
+    box-shadow: 0 0 12px rgba(130, 157, 100, 0.3);
   }
   50% {
-    box-shadow: 0 0 20px rgba(208, 0, 0, 0.5);
+    box-shadow: 0 0 20px rgba(130, 157, 100, 0.5);
   }
 }
 
@@ -279,7 +279,7 @@
 
 .hover-lift:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(208, 0, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(130, 157, 100, 0.3);
 }
 
 .hover-grow:hover {
@@ -287,7 +287,7 @@
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 16px rgba(208, 0, 0, 0.4);
+  box-shadow: 0 0 16px rgba(130, 157, 100, 0.4);
 }
 
 .hover-shift:hover {
@@ -303,7 +303,7 @@
 
 .focus-ring:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(208, 0, 0, 0.3);
+  box-shadow: 0 0 0 3px rgba(130, 157, 100, 0.3);
 }
 
 /* Animations pour éléments spécifiques */
@@ -341,9 +341,9 @@
 .loading-shimmer {
   background: linear-gradient(
     90deg,
-    #1a1a1a 0%,
-    #2a2a2a 50%,
-    #1a1a1a 100%
+    #1a3028 0%,
+    #254136 50%,
+    #1a3028 100%
   );
   background-size: 200% 100%;
   animation: shimmer 2s infinite;

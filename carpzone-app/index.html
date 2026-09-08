@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="CARPZONE - Application professionnelle de pêche à la carpe. Gérez vos sessions, prises, spots et appâts.">
   <title>CARPZONE - Analyse. Prépare. Capture.</title>
   
@@ -10,8 +10,8 @@
   <link rel="manifest" href="manifest.webmanifest?v7-20260907">
   
   <!-- Thème et couleurs -->
-  <meta name="theme-color" content="#D00000">
-  <meta name="background-color" content="#080808">
+  <meta name="theme-color" content="#1a3028">
+  <meta name="background-color" content="#101f1b">
   
   <!-- Apple/iOS Support -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -79,10 +79,11 @@
       filter: drop-shadow(0 0 4px rgba(208, 0, 0, 0.5));
     }
   </style>
+  <link rel="stylesheet" href="css/fishing-theme.css?v=8">
 </head>
 <body>
   <div class="phone-frame">
-    <div class="notch"></div>
+    <div class="notch"></div><header class="app-brand"><span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 40 40" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 20c9-13 21-11 28 0-7 11-19 13-28 0Zm0 0-5-7v14l5-7Zm9-8 5-5 4 6m-9 15 5 5 4-6"/><circle cx="28" cy="18" r="1.2" fill="currentColor"/><path d="M23 13q-4 7 0 14"/></svg></span><span>CARP<span class="brand-accent">ZONE</span><small>LE GOÛT DU GRAND AIR</small></span><span class="brand-edition">CARNET DE PÊCHE / ÉDITION NATURE</span></header>
     <div class="app-container">
       
       <div class="screen-content">
@@ -113,28 +114,28 @@
       </div>
 
       <!-- NAVIGATION BAR -->
-      <div class="nav-bar">
-        <div class="nav-item active" data-screen="home">
+      <div class="nav-bar" aria-label="Navigation principale">
+        <button type="button" class="nav-item active" data-screen="home">
           <i class="fas fa-home"></i>
           <div class="nav-label">Accueil</div>
-        </div>
-        <div class="nav-item" data-screen="map">
+        </button>
+        <button type="button" class="nav-item" data-screen="map">
           <i class="fas fa-map"></i>
           <div class="nav-label">Carte</div>
-        </div>
-        <div class="nav-plus" id="nav-add-btn">+</div>
-        <div class="nav-item" data-screen="sessions">
+        </button>
+        <button type="button" class="nav-plus" id="nav-add-btn" aria-label="Ajouter une session, une prise ou un spot">+</button>
+        <button type="button" class="nav-item" data-screen="sessions">
           <i class="fas fa-list"></i>
           <div class="nav-label">Sessions</div>
-        </div>
-        <div class="nav-item" data-screen="catches">
+        </button>
+        <button type="button" class="nav-item" data-screen="catches">
           <i class="fas fa-fish"></i>
           <div class="nav-label">Prises</div>
-        </div>
-        <div class="nav-item" data-screen="profile">
+        </button>
+        <button type="button" class="nav-item" data-screen="profile">
           <i class="fas fa-user"></i>
           <div class="nav-label">Profil</div>
-        </div>
+        </button>
       </div>
     </div>
   </div>

@@ -53,13 +53,13 @@
 }
 
 .btn-secondary {
-  background: #1a1a1a;
+  background: #1a3028;
   border: 1px solid var(--border-color);
   color: var(--accent-red);
 }
 
 .btn-secondary:hover {
-  background: #2a2a2a;
+  background: #254136;
   border-color: var(--accent-red);
 }
 
@@ -70,7 +70,7 @@
 }
 
 .btn-ghost:hover {
-  background: rgba(208, 0, 0, 0.1);
+  background: rgba(130, 157, 100, 0.1);
   border-color: var(--accent-red);
   color: var(--accent-red);
 }
@@ -80,7 +80,7 @@
    ============================================ */
 
 .stat-card {
-  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+  background: linear-gradient(135deg, #1a3028 0%, #14271f 100%);
   border: 1px solid var(--accent-red);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
@@ -136,7 +136,7 @@
 }
 
 .mini-stat {
-  background: #1a1a1a;
+  background: #1a3028;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
@@ -146,7 +146,7 @@
 
 .mini-stat:hover {
   border-color: var(--accent-red);
-  background: #2a2a2a;
+  background: #254136;
 }
 
 .mini-label {
@@ -169,7 +169,7 @@
    ============================================ */
 
 .moon-phase {
-  background: #1a1a1a;
+  background: #1a3028;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
@@ -182,7 +182,7 @@
 
 .moon-phase:hover {
   border-color: var(--accent-red);
-  background: #2a2a2a;
+  background: #254136;
 }
 
 .moon-icon {
@@ -216,7 +216,7 @@
 }
 
 .activity-meter {
-  background: #1a1a1a;
+  background: #1a3028;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
@@ -230,7 +230,7 @@
 .activity-bar {
   width: 100%;
   height: 6px;
-  background: #333;
+  background: #365046;
   border-radius: 3px;
   overflow: hidden;
   margin-bottom: 8px;
@@ -262,7 +262,7 @@
    ============================================ */
 
 .catch-item {
-  background: #1a1a1a;
+  background: #1a3028;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
@@ -276,7 +276,7 @@
 
 .catch-item:hover {
   border-color: var(--accent-red);
-  background: #2a2a2a;
+  background: #254136;
   transform: translateX(4px);
 }
 
@@ -329,7 +329,7 @@
 }
 
 .badge {
-  background: #1a1a1a;
+  background: #1a3028;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   padding: 8px;
@@ -355,8 +355,8 @@
 
 .badge.unlocked {
   border-color: var(--accent-red);
-  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
-  box-shadow: 0 0 12px rgba(208, 0, 0, 0.2);
+  background: linear-gradient(135deg, #1a3028 0%, #14271f 100%);
+  box-shadow: 0 0 12px rgba(130, 157, 100, 0.2);
 }
 
 /* ============================================
@@ -364,7 +364,7 @@
    ============================================ */
 
 .spot-item {
-  background: #1a1a1a;
+  background: #1a3028;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: var(--spacing-md);
@@ -378,7 +378,7 @@
 
 .spot-item:hover {
   border-color: var(--accent-red);
-  background: #2a2a2a;
+  background: #254136;
   transform: translateX(4px);
 }
 
@@ -409,7 +409,7 @@
    ============================================ */
 
 .option-list {
-  background: #1a1a1a;
+  background: #1a3028;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -430,7 +430,7 @@
 }
 
 .option-item:hover {
-  background: #2a2a2a;
+  background: #254136;
 }
 
 .option-item-label {
@@ -449,7 +449,7 @@
 input,
 textarea,
 select {
-  background: #1a1a1a;
+  background: #1a3028;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   color: var(--text-primary);
@@ -470,7 +470,7 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--accent-red);
-  box-shadow: 0 0 8px rgba(208, 0, 0, 0.2);
+  box-shadow: 0 0 8px rgba(130, 157, 100, 0.2);
 }
 
 input::placeholder {

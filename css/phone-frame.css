@@ -13,7 +13,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border: 8px solid #1a1a1a;
+  border: 8px solid #1a3028;
   position: relative;
 }
 
@@ -64,7 +64,7 @@
 
 /* Barre de navigation */
 .nav-bar {
-  background: #1a1a1a;
+  background: #1a3028;
   border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: space-around;
@@ -132,7 +132,7 @@
 
 .nav-plus:active {
   transform: scale(0.95);
-  box-shadow: 0 2px 8px rgba(208, 0, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(130, 157, 100, 0.4);
 }
 
 .nav-plus:hover {
@@ -155,7 +155,7 @@
   .phone-frame {
     width: 100%;
     border-radius: 16px;
-    border: 4px solid #1a1a1a;
+    border: 4px solid #1a3028;
   }
 
   .notch {

@@ -97,14 +97,14 @@ const Navigation = {
 
     let html = `
       <div class="add-menu-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000;" onclick="this.remove()">
-        <div style="background: #1a1a1a; border: 2px solid var(--accent-red); border-radius: 16px; padding: 20px; width: 90%; max-width: 300px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);" onclick="event.stopPropagation()">
+        <div style="background: #1a3028; border: 2px solid var(--accent-red); border-radius: 16px; padding: 20px; width: 90%; max-width: 300px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);" onclick="event.stopPropagation()">
           <h3 style="color: var(--text-primary); margin-bottom: 16px; text-align: center; font-size: 16px;">Ajouter</h3>
           <div style="display: grid; gap: 8px;">
     `;
 
     options.forEach(opt => {
       html += `
-        <button style="background: #0f0f0f; border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;" onmouseover="this.style.background='#2a2a2a'; this.style.borderColor='var(--accent-red)'" onmouseout="this.style.background='#0f0f0f'; this.style.borderColor='var(--border-color)'" onclick="Navigation.${opt.action}(); this.closest('.add-menu-overlay').remove()">
+        <button style="background: #14271f; border: 1px solid var(--border-color); color: var(--text-primary); padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px;" onmouseover="this.style.background='#254136'; this.style.borderColor='var(--accent-red)'" onmouseout="this.style.background='#14271f'; this.style.borderColor='var(--border-color)'" onclick="Navigation.${opt.action}(); this.closest('.add-menu-overlay').remove()">
           <span style="font-size: 18px;">${opt.icon}</span>
           ${opt.label}
         </button>

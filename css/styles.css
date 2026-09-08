@@ -5,17 +5,17 @@
 
 :root {
   /* Couleurs principales */
-  --primary-dark: #080808;
-  --primary-light: #1a1a1a;
-  --accent-red: #D00000;
-  --accent-red-hover: #a00000;
-  --accent-red-light: #ff4444;
+  --primary-dark: #101f1b;
+  --primary-light: #1a3028;
+  --accent-red: #b7cc85;
+  --accent-red-hover: #8ca963;
+  --accent-red-light: #c9dfa0;
   --text-primary: #ffffff;
-  --text-secondary: #cccccc;
-  --text-muted: #999999;
-  --text-dark: #666666;
-  --border-color: #333333;
-  --border-subtle: #1a1a1a;
+  --text-secondary: #ccd4c8;
+  --text-muted: #a6b5a9;
+  --text-dark: #94a69b;
+  --border-color: #365046;
+  --border-subtle: #1a3028;
 
   /* Espacements */
   --spacing-xs: 4px;
@@ -32,9 +32,9 @@
   --radius-full: 50%;
 
   /* Ombres */
-  --shadow-sm: 0 2px 8px rgba(208, 0, 0, 0.2);
-  --shadow-md: 0 4px 16px rgba(208, 0, 0, 0.3);
-  --shadow-lg: 0 6px 20px rgba(208, 0, 0, 0.4);
+  --shadow-sm: 0 2px 8px rgba(130, 157, 100, 0.2);
+  --shadow-md: 0 4px 16px rgba(130, 157, 100, 0.3);
+  --shadow-lg: 0 6px 20px rgba(130, 157, 100, 0.4);
 
   /* Transitions */
   --transition-fast: 0.2s ease;
@@ -61,7 +61,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  background: linear-gradient(135deg, #101f1b 0%, #1a3028 100%);
   min-height: 100vh;
 }
 

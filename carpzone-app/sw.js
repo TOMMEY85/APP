@@ -1,4 +1,4 @@
-const CACHE_NAME = 'carpzone-pwa-v7-cache-reset';
+const CACHE_NAME = 'carpzone-nature-v8-nested';
 const APP_SHELL = [
   './',
   './index.html',
@@ -8,6 +8,8 @@ const APP_SHELL = [
   './css/screens.css',
   './css/components.css',
   './css/animations.css',
+  './css/fishing-theme.css?v=8',
+  './assets/lake-landscape.svg',
   './data/app-data.js',
   './js/weather.js',
   './js/profile-manager.js',

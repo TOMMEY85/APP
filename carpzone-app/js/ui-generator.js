@@ -17,39 +17,31 @@ const UIGenerator = {
     const activityLevel = WeatherManager.getActivityLevel(activityScore);
     
     let html = `
-      <div class="home-screen" style="padding: 16px; background: #080808; color: #fff;">
+      <div class="home-screen" style="padding: 16px; background: #101f1b; color: #fff;">
         
-        <!-- En-tête -->
-        <div style="text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #333;">
-          <div style="font-size: 28px; font-weight: bold;">CARPZONE</div>
-          <div style="font-size: 12px; color: #D00000; margin-top: 4px;">Analyse. Prépare. Capture.</div>
-        </div>
-        
-        <!-- Salutation -->
-        <div style="font-size: 18px; margin-bottom: 20px;">
-          👋 Bonjour ${profile.firstName} !
-        </div>
+        <header class="journal-heading"><div><span class="eyebrow">LE CARNET DU CARPISTE</span><h1>Au fil de l’eau.</h1><p>Bonjour ${profile.firstName} · Prêt pour la prochaine touche ?</p></div><button class="journal-button" onclick="Navigation.showAddMenu()">+ Nouvelle sortie</button></header>
+        <section class="lake-hero"><div class="hero-copy"><span class="eyebrow">L’APPEL DU LARGE</span><h2>Les meilleures histoires<br>commencent au bord de l’eau.</h2><p>Repérez votre spot. Préparez votre session.<br>Gardez une trace de chaque prise.</p><button class="journal-button" onclick="Navigation.switchScreen('map')">Explorer mes spots ↗</button></div><span class="hero-caption">CARPZONE / VOTRE TERRAIN DE JEU</span></section>
     `;
     
     // Section Prochaine session
     html += `
-      <div style="background: #1a1a1a; border: 2px solid #D00000; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
-        <div style="font-size: 12px; color: #999; margin-bottom: 8px;">PROCHAINE SESSION</div>
+      <div class="next-session-panel" style="background: #1a3028; border: 2px solid #b7cc85; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+        <div style="font-size: 12px; color: #a6b5a9; margin-bottom: 8px;">PROCHAINE SESSION</div>
     `;
     
     if (nextSession) {
       html += `
         <div style="font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 4px;">${nextSession.name}</div>
-        <div style="font-size: 13px; color: #ccc; margin-bottom: 8px;">📍 ${nextSession.location}</div>
-        <div style="font-size: 12px; color: #999;">
+        <div style="font-size: 13px; color: #ccd4c8; margin-bottom: 8px;">📍 ${nextSession.location}</div>
+        <div style="font-size: 12px; color: #a6b5a9;">
           ${nextSession.startDate ? nextSession.startDate : 'Date non définie'}
         </div>
-        <button onclick="Navigation.switchScreen('sessions')" style="width: 100%; margin-top: 12px; padding: 8px; background: #D00000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">Voir la session</button>
+        <button onclick="Navigation.switchScreen('sessions')" style="width: 100%; margin-top: 12px; padding: 8px; background: #b7cc85; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">Voir la session</button>
       `;
     } else {
       html += `
-        <div style="color: #999;">Aucune session programmée</div>
-        <button onclick="App.showAddMenu()" style="width: 100%; margin-top: 12px; padding: 8px; background: #D00000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">+ Nouvelle session</button>
+        <div style="color: #a6b5a9;">Aucune session programmée</div>
+        <button onclick="App.showAddMenu()" style="width: 100%; margin-top: 12px; padding: 8px; background: #b7cc85; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">+ Nouvelle session</button>
       `;
     }
     
@@ -57,8 +49,8 @@ const UIGenerator = {
     
     // Section Météo
     html += `
-      <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
-        <div style="font-size: 12px; color: #999; margin-bottom: 8px;">🌤️ MÉTÉO ACTUELLE</div>
+      <div style="background: #1a3028; border: 1px solid #365046; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+        <div style="font-size: 12px; color: #a6b5a9; margin-bottom: 8px;">🌤️ MÉTÉO ACTUELLE</div>
     `;
     
     if (weather) {
@@ -78,48 +70,48 @@ html += `
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
           <div>
             <div style="font-size: 32px;">${weatherEmoji}</div>
-            <div style="font-size: 28px; font-weight: bold; color: #D00000;">${temp}°C</div>
-            <div style="font-size: 12px; color: #999;">${weatherDesc}</div>
+            <div style="font-size: 28px; font-weight: bold; color: #b7cc85;">${temp}°C</div>
+            <div style="font-size: 12px; color: #a6b5a9;">${weatherDesc}</div>
           </div>
           
           <div>
-            <div style="font-size: 12px; color: #999; margin-bottom: 4px;">💨 Vent</div>
+            <div style="font-size: 12px; color: #a6b5a9; margin-bottom: 4px;">💨 Vent</div>
             <div style="font-size: 16px; font-weight: 600;">${Math.round(weather.wind_speed_10m)} km/h</div>
-            <div style="font-size: 13px; color: #ccc;">Direction: ${windDir}</div>
-            <div style="font-size: 12px; color: #999;">Rafales: ${gusts !== null ? gusts + ' km/h' : '—'}</div>
+            <div style="font-size: 13px; color: #ccd4c8;">Direction: ${windDir}</div>
+            <div style="font-size: 12px; color: #a6b5a9;">Rafales: ${gusts !== null ? gusts + ' km/h' : '—'}</div>
           </div>
         </div>
         
-        <div style="background: #0f0f0f; border-radius: 8px; padding: 8px; margin-bottom: 8px;">
-          <div style="font-size: 12px; color: #999;">📊 Pression mer: ${pressure} hPa ${pressureTrend}</div>
-          <div style="font-size: 11px; color: #777; margin-top: 3px;">Pression locale: ${surfacePressure !== null ? surfacePressure + ' hPa' : '—'}</div>
-          <div style="font-size: 11px; color: #666; margin-top: 4px;">${WeatherManager.getPressureHistory()}</div>
+        <div style="background: #14271f; border-radius: 8px; padding: 8px; margin-bottom: 8px;">
+          <div style="font-size: 12px; color: #a6b5a9;">📊 Pression mer: ${pressure} hPa ${pressureTrend}</div>
+          <div style="font-size: 11px; color: #94a69b; margin-top: 3px;">Pression locale: ${surfacePressure !== null ? surfacePressure + ' hPa' : '—'}</div>
+          <div style="font-size: 11px; color: #94a69b; margin-top: 4px;">${WeatherManager.getPressureHistory()}</div>
         </div>
         
         <div style="display: flex; gap: 8px; font-size: 12px;">
-          <div style="flex: 1; background: #0f0f0f; padding: 6px; border-radius: 6px; text-align: center;">
-            <div style="color: #999;">💧</div>
-            <div style="color: #ccc;">${humidity}% humidité</div>
+          <div style="flex: 1; background: #14271f; padding: 6px; border-radius: 6px; text-align: center;">
+            <div style="color: #a6b5a9;">💧</div>
+            <div style="color: #ccd4c8;">${humidity}% humidité</div>
           </div>
-          <div style="flex: 1; background: #0f0f0f; padding: 6px; border-radius: 6px; text-align: center;">
-            <div style="color: #999;">🌅</div>
-            <div style="color: #ccc;">${weather.sunrise ? weather.sunrise.slice(11, 16) : '--:--'}</div>
+          <div style="flex: 1; background: #14271f; padding: 6px; border-radius: 6px; text-align: center;">
+            <div style="color: #a6b5a9;">🌅</div>
+            <div style="color: #ccd4c8;">${weather.sunrise ? weather.sunrise.slice(11, 16) : '--:--'}</div>
           </div>
-          <div style="flex: 1; background: #0f0f0f; padding: 6px; border-radius: 6px; text-align: center;">
-            <div style="color: #999;">🌇</div>
-            <div style="color: #ccc;">${weather.sunset ? weather.sunset.slice(11, 16) : '--:--'}</div>
+          <div style="flex: 1; background: #14271f; padding: 6px; border-radius: 6px; text-align: center;">
+            <div style="color: #a6b5a9;">🌇</div>
+            <div style="color: #ccd4c8;">${weather.sunset ? weather.sunset.slice(11, 16) : '--:--'}</div>
           </div>
         </div>
-        <button onclick="WeatherManager.refreshFromGPS()" style="width: 100%; margin-top: 10px; padding: 8px; background: #0f0f0f; color: #fff; border: 1px solid #D00000; border-radius: 6px; cursor: pointer; font-size: 12px;">
+        <button onclick="WeatherManager.refreshFromGPS()" style="width: 100%; margin-top: 10px; padding: 8px; background: #14271f; color: #fff; border: 1px solid #b7cc85; border-radius: 6px; cursor: pointer; font-size: 12px;">
           🔄 Actualiser la météo
         </button>
-        <div style="margin-top: 6px; text-align: center; font-size: 10px; color: #666;">${lastUpdated}</div>
+        <div style="margin-top: 6px; text-align: center; font-size: 10px; color: #94a69b;">${lastUpdated}</div>
       `;
     } else {
       html += `
-        <div style="color: #999; text-align: center; padding: 16px;">
+        <div style="color: #a6b5a9; text-align: center; padding: 16px;">
           <div style="margin-bottom: 10px;">Météo locale non chargée</div>
-          <button onclick="WeatherManager.refreshFromGPS()" style="padding: 9px 12px; background: #D00000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
+          <button onclick="WeatherManager.refreshFromGPS()" style="padding: 9px 12px; background: #b7cc85; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">
             📍 Utiliser ma position
           </button>
           <br><small style="display:block; margin-top:8px;">CARPZONE reste utilisable si le GPS est refusé.</small>
@@ -131,17 +123,17 @@ html += `
     
     // Indice d'activité de carpe
     html += `
-      <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
-        <div style="font-size: 12px; color: #999; margin-bottom: 8px;">🎣 CONDITIONS CARPE</div>
+      <div style="background: #1a3028; border: 1px solid #365046; border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+        <div style="font-size: 12px; color: #a6b5a9; margin-bottom: 8px;">🎣 CONDITIONS CARPE</div>
         <div style="display: flex; align-items: center; gap: 12px;">
           <div style="flex: 1;">
-            <div style="background: #0f0f0f; height: 8px; border-radius: 4px; overflow: hidden;">
-              <div style="background: linear-gradient(90deg, #D00000 0%, #D00000 100%); height: 100%; width: ${activityScore}%;" ></div>
+            <div style="background: #14271f; height: 8px; border-radius: 4px; overflow: hidden;">
+              <div style="background: linear-gradient(90deg, #b7cc85 0%, #b7cc85 100%); height: 100%; width: ${activityScore}%;" ></div>
             </div>
           </div>
           <div style="text-align: right;">
-            <div style="font-size: 16px; font-weight: 600; color: #D00000;">${activityScore}/100</div>
-            <div style="font-size: 12px; color: #999;">${activityLevel}</div>
+            <div style="font-size: 16px; font-weight: 600; color: #b7cc85;">${activityScore}/100</div>
+            <div style="font-size: 12px; color: #a6b5a9;">${activityLevel}</div>
           </div>
         </div>
       </div>
@@ -151,24 +143,24 @@ html += `
     if (recentCatches.length > 0) {
       html += `
         <div style="margin-bottom: 16px;">
-          <div style="font-size: 12px; color: #999; margin-bottom: 8px;">🐟 DERNIÈRES PRISES</div>
+          <div style="font-size: 12px; color: #a6b5a9; margin-bottom: 8px;">🐟 DERNIÈRES PRISES</div>
       `;
       
       recentCatches.forEach(c => {
         html += `
-          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px;">
+          <div style="background: #1a3028; border: 1px solid #365046; border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px;">
             <div style="font-size: 24px;">🐟</div>
             <div style="flex: 1;">
               <div style="font-weight: 600; color: #fff;">${c.species}</div>
-              <div style="font-size: 12px; color: #999;">${this.formatDate(c.date)} • ${c.location}</div>
+              <div style="font-size: 12px; color: #a6b5a9;">${this.formatDate(c.date)} • ${c.location}</div>
             </div>
-            <div style="font-size: 16px; font-weight: 600; color: #D00000;">${c.weight} kg</div>
+            <div style="font-size: 16px; font-weight: 600; color: #b7cc85;">${c.weight} kg</div>
           </div>
         `;
       });
       
       html += `
-        <button onclick="Navigation.switchScreen('catches')" style="width: 100%; padding: 8px; background: #333; color: #ccc; border: 1px solid #555; border-radius: 6px; cursor: pointer; font-size: 12px;">Voir toutes les prises</button>
+        <button onclick="Navigation.switchScreen('catches')" style="width: 100%; padding: 8px; background: #365046; color: #ccd4c8; border: 1px solid #52695d; border-radius: 6px; cursor: pointer; font-size: 12px;">Voir toutes les prises</button>
         </div>
       `;
     }
@@ -176,23 +168,23 @@ html += `
     // Statistiques
     html += `
       <div style="margin-bottom: 16px;">
-        <div style="font-size: 12px; color: #999; margin-bottom: 8px;">📈 STATISTIQUES</div>
+        <div style="font-size: 12px; color: #a6b5a9; margin-bottom: 8px;">📈 STATISTIQUES</div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
-            <div style="font-size: 24px; font-weight: bold; color: #D00000;">${stats.totalCatches}</div>
-            <div style="font-size: 11px; color: #999;">Prises totales</div>
+          <div style="background: #1a3028; border: 1px solid #365046; border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #b7cc85;">${stats.totalCatches}</div>
+            <div style="font-size: 11px; color: #a6b5a9;">Prises totales</div>
           </div>
-          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
-            <div style="font-size: 24px; font-weight: bold; color: #D00000;">${stats.personalRecord} kg</div>
-            <div style="font-size: 11px; color: #999;">Record</div>
+          <div style="background: #1a3028; border: 1px solid #365046; border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #b7cc85;">${stats.personalRecord} kg</div>
+            <div style="font-size: 11px; color: #a6b5a9;">Record</div>
           </div>
-          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
-            <div style="font-size: 24px; font-weight: bold; color: #D00000;">${AppData.sessions.length}</div>
-            <div style="font-size: 11px; color: #999;">Sessions</div>
+          <div style="background: #1a3028; border: 1px solid #365046; border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #b7cc85;">${AppData.sessions.length}</div>
+            <div style="font-size: 11px; color: #a6b5a9;">Sessions</div>
           </div>
-          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
-            <div style="font-size: 24px; font-weight: bold; color: #D00000;">${stats.averageWeight} kg</div>
-            <div style="font-size: 11px; color: #999;">Poids moyen</div>
+          <div style="background: #1a3028; border: 1px solid #365046; border-radius: 8px; padding: 12px; text-align: center;">
+            <div style="font-size: 24px; font-weight: bold; color: #b7cc85;">${stats.averageWeight} kg</div>
+            <div style="font-size: 11px; color: #a6b5a9;">Poids moyen</div>
           </div>
         </div>
       </div>
@@ -207,25 +199,25 @@ html += `
   // Génère l'écran de la carte
   generateMapScreen() {
     const html = `
-      <div class="map-screen" style="display: flex; flex-direction: column; height: 100%; background: #080808;">
+      <div class="map-screen" style="display: flex; flex-direction: column; height: 100%; background: #101f1b;">
         <!-- Barre d'outils -->
-        <div style="padding: 12px; background: #1a1a1a; border-bottom: 1px solid #333; display: flex; gap: 8px; flex-wrap: wrap;">
-          <button onclick="MapManager.locateUser()" style="flex: 1; min-width: 100px; padding: 8px; background: #D00000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">📍 Me localiser</button>
-          <button onclick="MapManager.openAddSpotForm(48.8566, 2.3522)" style="flex: 1; min-width: 100px; padding: 8px; background: #333; color: #ccc; border: 1px solid #555; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">+ Ajouter spot</button>
+        <div style="padding: 12px; background: #1a3028; border-bottom: 1px solid #365046; display: flex; gap: 8px; flex-wrap: wrap;">
+          <button onclick="MapManager.locateUser()" style="flex: 1; min-width: 100px; padding: 8px; background: #b7cc85; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">📍 Me localiser</button>
+          <button onclick="MapManager.openAddSpotForm(48.8566, 2.3522)" style="flex: 1; min-width: 100px; padding: 8px; background: #365046; color: #ccd4c8; border: 1px solid #52695d; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">+ Ajouter spot</button>
         </div>
         
         <!-- Carte Leaflet -->
-        <div id="map-container" style="flex: 1; background: #0a0a0a;"></div>
+        <div id="map-container" style="flex: 1; background: #101f1b;"></div>
         
         <!-- Liste des spots -->
-        <div style="max-height: 30%; overflow-y: auto; background: #1a1a1a; border-top: 1px solid #333;">
-          <div style="padding: 12px; font-size: 12px; color: #999;">📍 SPOTS ENREGISTRÉS (${AppData.spots.length})</div>
+        <div style="max-height: 30%; overflow-y: auto; background: #1a3028; border-top: 1px solid #365046;">
+          <div style="padding: 12px; font-size: 12px; color: #a6b5a9;">📍 SPOTS ENREGISTRÉS (${AppData.spots.length})</div>
           ${AppData.spots.length > 0 ? AppData.spots.map(spot => `
-            <div style="background: #0f0f0f; border: 1px solid #333; border-radius: 6px; padding: 8px 12px; margin: 0 8px 8px 8px; cursor: pointer;" onclick="MapManager.locateSpot('${spot.id}')">
+            <div style="background: #14271f; border: 1px solid #365046; border-radius: 6px; padding: 8px 12px; margin: 0 8px 8px 8px; cursor: pointer;" onclick="MapManager.locateSpot('${spot.id}')">
               <div style="font-weight: 600; color: #fff; font-size: 12px;">${spot.name}</div>
-              <div style="font-size: 11px; color: #999;">${spot.lake}</div>
+              <div style="font-size: 11px; color: #a6b5a9;">${spot.lake}</div>
             </div>
-          `).join('') : '<div style="padding: 12px; color: #666; text-align: center;">Cliquez sur la carte pour ajouter des spots</div>'}
+          `).join('') : '<div style="padding: 12px; color: #94a69b; text-align: center;">Cliquez sur la carte pour ajouter des spots</div>'}
         </div>
       </div>
     `;
@@ -237,6 +229,9 @@ html += `
   generateSessionsScreen() {
     const html = `
       <div class="sessions-screen">
+        <header class="journal-heading"><div><span class="eyebrow">VOTRE JOURNAL DE BORD</span><h1>Mes sessions</h1><p>Chaque sortie, une nouvelle histoire.</p></div><button class="journal-button" onclick="Navigation.addSession()">+ Nouvelle session</button></header>
+        ${AppData.sessions.length === 0 ? '<div class="nature-empty"><span aria-hidden="true">⌁</span><h2>Votre prochaine aventure vous attend.</h2><p>Planifiez votre première session pour retrouver ici vos sorties et vos souvenirs au bord de l’eau.</p><button class="journal-button" onclick="Navigation.addSession()">Préparer ma première session</button></div>' : ''}
+
         <div class="section-title">Sessions actives</div>
         
         ${AppData.sessions.filter(s => s.status === 'active').map(s => this.generateSessionCard(s)).join('')}
@@ -262,7 +257,7 @@ html += `
             <div class="session-title">${session.name}</div>
             <div style="font-size:11px;color:var(--text-dark);">${session.location} • ${this.formatDate(session.startDate)}</div>
           </div>
-          ${session.status === 'active' ? '<div class="session-status">EN COURS</div>' : '<div style="font-size:10px;color:#777;">TERMINÉE</div>'}
+          ${session.status === 'active' ? '<div class="session-status">EN COURS</div>' : '<div style="font-size:10px;color:#94a69b;">TERMINÉE</div>'}
         </div>
         <div class="session-stat"><span>Prises:</span><span class="session-value">${catches.length}</span></div>
         <div class="session-stat"><span>Poids total:</span><span class="session-value">${totalWeight} kg</span></div>
@@ -270,14 +265,14 @@ html += `
         ${catches.slice(0,3).map(c => `
           <div style="display:flex;gap:8px;align-items:center;margin-top:7px;">
             ${c.photo ? `<img src="${c.photo}" style="width:38px;height:38px;border-radius:7px;object-fit:cover;">` : '<div style="width:38px;height:38px;border-radius:7px;background:#111;display:flex;align-items:center;justify-content:center;">🐟</div>'}
-            <div style="font-size:11px;color:#ccc;">${c.species || 'Carpe'} • <strong>${c.weight} kg</strong></div>
+            <div style="font-size:11px;color:#ccd4c8;">${c.species || 'Carpe'} • <strong>${c.weight} kg</strong></div>
           </div>
         `).join('')}
 
         <div style="display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;">
-          ${session.status === 'active' ? `<button onclick="openAddCatchForm('${session.id}')" style="flex:1;padding:8px;background:#D00000;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;">🐟 Ajouter prise</button>` : ''}
-          <button onclick="openEditSessionForm('${session.id}')" style="flex:1;padding:8px;background:#191919;color:#fff;border:1px solid #D00000;border-radius:6px;font-size:11px;">✏️ Modifier</button>
-          <button onclick="confirmDelete('Session', '${session.name}', () => deleteSession('${session.id}') && App.reloadAllScreens())" style="flex:1;padding:8px;background:#333;color:#ccc;border:1px solid #555;border-radius:6px;font-size:11px;">🗑️ Supprimer</button>
+          ${session.status === 'active' ? `<button onclick="openAddCatchForm('${session.id}')" style="flex:1;padding:8px;background:#b7cc85;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;">🐟 Ajouter prise</button>` : ''}
+          <button onclick="openEditSessionForm('${session.id}')" style="flex:1;padding:8px;background:#191919;color:#fff;border:1px solid #b7cc85;border-radius:6px;font-size:11px;">✏️ Modifier</button>
+          <button onclick="confirmDelete('Session', '${session.name}', () => deleteSession('${session.id}') && App.reloadAllScreens())" style="flex:1;padding:8px;background:#365046;color:#ccd4c8;border:1px solid #52695d;border-radius:6px;font-size:11px;">🗑️ Supprimer</button>
         </div>
       </div>
     `;
@@ -288,6 +283,9 @@ html += `
     const stats = getStatistics();
     const html = `
       <div class="catches-screen">
+        <header class="journal-heading"><div><span class="eyebrow">LES SOUVENIRS QUI RESTENT</span><h1>Mes prises</h1><p>Le carnet de vos plus belles captures.</p></div><button class="journal-button" onclick="Navigation.addCatch()">+ Ajouter une prise</button></header>
+        ${AppData.catches.length === 0 ? '<div class="nature-empty"><span aria-hidden="true">⌁</span><h2>La première prise ouvre le carnet.</h2><p>Enregistrez votre capture, son poids et les conditions de votre session.</p></div>' : ''}
+
         <div class="section-title">Carnet des prises</div>
         
         <div class="stats-grid">
@@ -323,7 +321,7 @@ html += `
               </div>
               <div class="catch-weight" style="text-align: right;">${c.weight} kg</div>
             </div>
-            <button onclick="confirmDelete('Prise', '${c.species}', () => deleteCatch('${c.id}') && App.reloadAllScreens())" style="width: 100%; margin-top: 8px; padding: 6px; background: #333; color: #ccc; border: 1px solid #555; border-radius: 6px; font-size: 11px; cursor: pointer;">🗑️ Supprimer</button>
+            <button onclick="confirmDelete('Prise', '${c.species}', () => deleteCatch('${c.id}') && App.reloadAllScreens())" style="width: 100%; margin-top: 8px; padding: 6px; background: #365046; color: #ccd4c8; border: 1px solid #52695d; border-radius: 6px; font-size: 11px; cursor: pointer;">🗑️ Supprimer</button>
           </div>
         `).join('')}
       </div>
@@ -339,34 +337,34 @@ html += `
     const unlockedBadges = AppData.badges.filter(b => b.unlocked).length;
 
     const html = `
-      <div class="profile-screen" style="padding: 16px; background: #080808; color: #fff;">
+      <div class="profile-screen" style="padding: 16px; background: #101f1b; color: #fff;">
         
         <!-- En-tête du profil -->
-        <div style="text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #333;">
+        <div style="text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #365046;">
           <div style="font-size: 48px; margin-bottom: 12px;">${profile.avatar}</div>
           <div style="font-size: 18px; font-weight: 600;">${profile.firstName} ${profile.lastName}</div>
-          <div style="font-size: 12px; color: #999; margin-top: 4px;">@${profile.username}</div>
-          <div style="font-size: 12px; color: #D00000; margin-top: 4px;">${profile.bio}</div>
-          <button onclick="ProfileManager.openEditForm()" style="width: 100%; margin-top: 12px; padding: 8px; background: #D00000; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">✏️ Modifier mon profil</button>
+          <div style="font-size: 12px; color: #a6b5a9; margin-top: 4px;">@${profile.username}</div>
+          <div style="font-size: 12px; color: #b7cc85; margin-top: 4px;">${profile.bio}</div>
+          <button onclick="ProfileManager.openEditForm()" style="width: 100%; margin-top: 12px; padding: 8px; background: #b7cc85; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px;">✏️ Modifier mon profil</button>
         </div>
         
         <!-- Compte et sauvegarde cloud -->
         <div style="margin-bottom: 24px;">
-          <div style="font-size: 12px; color: #999; margin-bottom: 8px;">☁️ COMPTE & SAUVEGARDE</div>
-          <div style="background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:12px;">
+          <div style="font-size: 12px; color: #a6b5a9; margin-bottom: 8px;">☁️ COMPTE & SAUVEGARDE</div>
+          <div style="background:#1a3028;border:1px solid #365046;border-radius:8px;padding:12px;">
             ${typeof CloudManager !== 'undefined' && CloudManager.isLoggedIn() ? `
               <div style="font-size:12px;color:#fff;margin-bottom:5px;">Connecté : <strong>${CloudManager.getEmail()}</strong></div>
               <div style="font-size:11px;color:#4caf50;margin-bottom:10px;">✓ ${CloudManager.getStatusLabel()}</div>
               <div style="display:flex;gap:8px;">
-                <button onclick="AccountUI.syncNow()" style="flex:1;padding:9px;background:#D00000;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;">☁️ Synchroniser</button>
-                <button onclick="AccountUI.signOut()" style="flex:1;padding:9px;background:#111;color:#ccc;border:1px solid #555;border-radius:6px;font-size:11px;cursor:pointer;">Déconnexion</button>
+                <button onclick="AccountUI.syncNow()" style="flex:1;padding:9px;background:#b7cc85;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;">☁️ Synchroniser</button>
+                <button onclick="AccountUI.signOut()" style="flex:1;padding:9px;background:#111;color:#ccd4c8;border:1px solid #52695d;border-radius:6px;font-size:11px;cursor:pointer;">Déconnexion</button>
               </div>
             ` : `
-              <div style="font-size:12px;color:#ccc;margin-bottom:8px;">Connectez-vous pour retrouver vos données sur un autre téléphone.</div>
-              <div style="font-size:10px;color:#777;margin-bottom:10px;">Vos données actuelles restent sur cet appareil et seront envoyées dans votre compte lors de la première connexion.</div>
+              <div style="font-size:12px;color:#ccd4c8;margin-bottom:8px;">Connectez-vous pour retrouver vos données sur un autre téléphone.</div>
+              <div style="font-size:10px;color:#94a69b;margin-bottom:10px;">Vos données actuelles restent sur cet appareil et seront envoyées dans votre compte lors de la première connexion.</div>
               <div style="display:flex;gap:8px;">
-                <button onclick="AccountUI.openSignIn()" style="flex:1;padding:9px;background:#D00000;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;">Se connecter</button>
-                <button onclick="AccountUI.openSignUp()" style="flex:1;padding:9px;background:#111;color:#fff;border:1px solid #D00000;border-radius:6px;font-size:11px;cursor:pointer;">Créer un compte</button>
+                <button onclick="AccountUI.openSignIn()" style="flex:1;padding:9px;background:#b7cc85;color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;">Se connecter</button>
+                <button onclick="AccountUI.openSignUp()" style="flex:1;padding:9px;background:#111;color:#fff;border:1px solid #b7cc85;border-radius:6px;font-size:11px;cursor:pointer;">Créer un compte</button>
               </div>
             `}
           </div>
@@ -374,35 +372,35 @@ html += `
 
         <!-- Statistiques -->
         <div style="margin-bottom: 24px;">
-          <div style="font-size: 12px; color: #999; margin-bottom: 8px;">📈 STATISTIQUES</div>
+          <div style="font-size: 12px; color: #a6b5a9; margin-bottom: 8px;">📈 STATISTIQUES</div>
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
-              <div style="font-size: 20px; font-weight: bold; color: #D00000;">${stats.totalSessions}</div>
-              <div style="font-size: 11px; color: #999;">Sessions</div>
+            <div style="background: #1a3028; border: 1px solid #365046; border-radius: 8px; padding: 12px; text-align: center;">
+              <div style="font-size: 20px; font-weight: bold; color: #b7cc85;">${stats.totalSessions}</div>
+              <div style="font-size: 11px; color: #a6b5a9;">Sessions</div>
             </div>
-            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
-              <div style="font-size: 20px; font-weight: bold; color: #D00000;">${stats.totalCatches}</div>
-              <div style="font-size: 11px; color: #999;">Carpes</div>
+            <div style="background: #1a3028; border: 1px solid #365046; border-radius: 8px; padding: 12px; text-align: center;">
+              <div style="font-size: 20px; font-weight: bold; color: #b7cc85;">${stats.totalCatches}</div>
+              <div style="font-size: 11px; color: #a6b5a9;">Carpes</div>
             </div>
-            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
-              <div style="font-size: 20px; font-weight: bold; color: #D00000;">${stats.totalWeight} kg</div>
-              <div style="font-size: 11px; color: #999;">Poids total</div>
+            <div style="background: #1a3028; border: 1px solid #365046; border-radius: 8px; padding: 12px; text-align: center;">
+              <div style="font-size: 20px; font-weight: bold; color: #b7cc85;">${stats.totalWeight} kg</div>
+              <div style="font-size: 11px; color: #a6b5a9;">Poids total</div>
             </div>
-            <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; text-align: center;">
-              <div style="font-size: 20px; font-weight: bold; color: #D00000;">${stats.personalRecord} kg</div>
-              <div style="font-size: 11px; color: #999;">Record</div>
+            <div style="background: #1a3028; border: 1px solid #365046; border-radius: 8px; padding: 12px; text-align: center;">
+              <div style="font-size: 20px; font-weight: bold; color: #b7cc85;">${stats.personalRecord} kg</div>
+              <div style="font-size: 11px; color: #a6b5a9;">Record</div>
             </div>
           </div>
         </div>
         
         <!-- Badges -->
         <div style="margin-bottom: 24px;">
-          <div style="font-size: 12px; color: #999; margin-bottom: 8px;">🏆 BADGES (${unlockedBadges}/${AppData.badges.length})</div>
+          <div style="font-size: 12px; color: #a6b5a9; margin-bottom: 8px;">🏆 BADGES (${unlockedBadges}/${AppData.badges.length})</div>
           <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
             ${AppData.badges.map(b => `
-              <div style="background: ${b.unlocked ? '#1a1a1a' : '#0f0f0f'}; border: 1px solid ${b.unlocked ? '#D00000' : '#333'}; border-radius: 8px; padding: 8px; text-align: center; cursor: pointer;" title="${b.name}">
+              <div style="background: ${b.unlocked ? '#1a3028' : '#14271f'}; border: 1px solid ${b.unlocked ? '#b7cc85' : '#365046'}; border-radius: 8px; padding: 8px; text-align: center; cursor: pointer;" title="${b.name}">
                 <div style="font-size: 24px;">${b.emoji}</div>
-                <div style="font-size: 9px; color: ${b.unlocked ? '#D00000' : '#666'}; margin-top: 2px;">${b.unlocked ? '✓' : '🔒'}</div>
+                <div style="font-size: 9px; color: ${b.unlocked ? '#b7cc85' : '#94a69b'}; margin-top: 2px;">${b.unlocked ? '✓' : '🔒'}</div>
               </div>
             `).join('')}
           </div>
@@ -410,26 +408,26 @@ html += `
         
         <!-- Informations -->
         <div style="margin-bottom: 24px;">
-          <div style="font-size: 12px; color: #999; margin-bottom: 8px;">ℹ️ INFORMATIONS</div>
-          <div style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; font-size: 12px;">
+          <div style="font-size: 12px; color: #a6b5a9; margin-bottom: 8px;">ℹ️ INFORMATIONS</div>
+          <div style="background: #1a3028; border: 1px solid #365046; border-radius: 8px; padding: 12px; font-size: 12px;">
             <div style="margin-bottom: 8px;">
-              <span style="color: #999;">Inscrit depuis:</span>
+              <span style="color: #a6b5a9;">Inscrit depuis:</span>
               <span style="color: #fff;">${new Date(profile.joinDate).toLocaleDateString('fr-FR')}</span>
             </div>
             <div style="margin-bottom: 8px;">
-              <span style="color: #999;">Moyenne par prise:</span>
+              <span style="color: #a6b5a9;">Moyenne par prise:</span>
               <span style="color: #fff;">${stats.averageWeight} kg</span>
             </div>
             <div>
-              <span style="color: #999;">Données sauvegardées:</span>
+              <span style="color: #a6b5a9;">Données sauvegardées:</span>
               <span style="color: #fff;">${typeof CloudManager !== 'undefined' && CloudManager.isLoggedIn() ? '✓ Local + cloud' : '✓ Locales'}</span>
             </div>
           </div>
         </div>
         
         <!-- Version -->
-        <div style="text-align: center; padding-top: 12px; border-top: 1px solid #333;">
-          <div style="font-size: 10px; color: #666;">CARPZONE v6.0 • Compte & sauvegarde cloud</div>
+        <div style="text-align: center; padding-top: 12px; border-top: 1px solid #365046;">
+          <div style="font-size: 10px; color: #94a69b;">CARPZONE v6.0 • Compte & sauvegarde cloud</div>
         </div>
       </div>
     `;

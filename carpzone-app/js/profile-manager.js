@@ -58,23 +58,23 @@ const ProfileManager = {
     const content = `
       <form style="display: grid; gap: 12px;">
         <div>
-          <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Prénom</label>
-          <input type="text" name="firstName" value="${profile.firstName}" placeholder="Prénom" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+          <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Prénom</label>
+          <input type="text" name="firstName" value="${profile.firstName}" placeholder="Prénom" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
         </div>
         
         <div>
-          <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Nom</label>
-          <input type="text" name="lastName" value="${profile.lastName}" placeholder="Nom" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+          <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Nom</label>
+          <input type="text" name="lastName" value="${profile.lastName}" placeholder="Nom" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
         </div>
         
         <div>
-          <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Pseudo</label>
-          <input type="text" name="username" value="${profile.username}" placeholder="Pseudo" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff;">
+          <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Pseudo</label>
+          <input type="text" name="username" value="${profile.username}" placeholder="Pseudo" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
         </div>
         
         <div>
-          <label style="color: #999; font-size: 12px; display: block; margin-bottom: 4px;">Bio</label>
-          <textarea name="bio" placeholder="Bio courte" style="width: 100%; padding: 10px; background: #0f0f0f; border: 1px solid #333; border-radius: 6px; color: #fff; min-height: 60px; resize: none;">${profile.bio}</textarea>
+          <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Bio</label>
+          <textarea name="bio" placeholder="Bio courte" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff; min-height: 60px; resize: none;">${profile.bio}</textarea>
         </div>
       </form>
     `;
