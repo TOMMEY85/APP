@@ -86,19 +86,23 @@ function openModal(title, content, onSave, onCancel) {
     cursor: pointer;
     transition: all 0.2s;
   `;
-  saveBtn.onclick = () => {
-    const formData = new FormData(document.querySelector('form'));
-    const data = Object.fromEntries(formData);
-    
-    // Validation
+  saveBtn.onclick = async () => {
+    if (saveBtn.disabled) return;
+    const form = formContainer.querySelector('form');
+    if (!form || !form.reportValidity() || !CatchPhotoPicker.ready(form)) return;
+    const data = Object.fromEntries(new FormData(form));
     const errors = validateForm(data);
-    if (errors.length > 0) {
-      alert('Erreurs:\n' + errors.join('\n'));
-      return;
-    }
-    
-    if (onSave(data)) {
-      closeModal();
+    if (errors.length) { alert('Erreurs:\n' + errors.join('\n')); return; }
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Enregistrement…';
+    try {
+      if (await onSave(data, form)) closeModal();
+    } catch (error) {
+      console.error(error);
+      showNotification('Enregistrement impossible. Votre formulaire est conservé.');
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Enregistrer';
     }
   };
 
@@ -131,6 +135,7 @@ function openModal(title, content, onSave, onCancel) {
 
   document.body.appendChild(backdrop);
   backdrop.id = 'modal-backdrop';
+  CatchPhotoPicker.init(formContainer.querySelector('form'));
 }
 
 function closeModal() {
@@ -252,6 +257,7 @@ function openAddSessionForm() {
 function openAddCatchForm() {
   const content = `
     <form style="display: grid; gap: 12px;">
+      ${CatchPhotoPicker.markup()}
       <div>
         <label style="color: #a6b5a9; font-size: 12px; display: block; margin-bottom: 4px;">Espèce *</label>
         <input type="text" name="species" placeholder="Ex: Carpe commune" style="width: 100%; padding: 10px; background: #14271f; border: 1px solid #365046; border-radius: 6px; color: #fff;">
@@ -319,8 +325,9 @@ function openAddCatchForm() {
     </form>
   `;
 
-  openModal('🐟 Nouvelle Prise', content, (data) => {
+  openModal('🐟 Nouvelle Prise', content, (data, form) => {
     addCatch({
+      photo: form.catchPhotoState?.photo || '',
       species: data.species,
       weight: parseFloat(data.weight),
       length: data.length,

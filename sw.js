@@ -1,4 +1,4 @@
-const CACHE_NAME = 'carpzone-nature-v8';
+const CACHE_NAME = 'carpzone-photos-v9';
 const APP_SHELL = [
   './',
   './index.html',
@@ -8,11 +8,12 @@ const APP_SHELL = [
   './css/screens.css',
   './css/components.css',
   './css/animations.css',
-  './css/fishing-theme.css?v=8',
+  './css/fishing-theme.css?v=9',
   './assets/lake-landscape.svg',
   './data/app-data.js',
-  './js/ui-generator.js',
-  './js/modals.js',
+  './js/ui-generator.js?v=9',
+  './js/modals.js?v=9',
+  './js/photo-picker.js?v=9',
   './js/navigation.js',
   './js/app.js',
   './assets/icons/icon-180.png',

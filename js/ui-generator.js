@@ -303,7 +303,7 @@ const UIGenerator = {
         ${AppData.catches.map((c, idx) => `
           <div class="catch-item">
             <div style="display: flex; gap: 12px; width: 100%;">
-              <div class="catch-thumb" style="background: linear-gradient(135deg, var(--accent-red) 0%, hsl(145, 25%, ${40 + idx * 5}%) 100%); cursor: pointer;" onclick="App.viewCatchDetails('${c.id}')">🐟</div>
+              ${c.photo ? `<img class="catch-thumb" src="${c.photo}" alt="Photo de la prise" style="object-fit:cover;cursor:pointer" onclick="App.viewCatchDetails('${c.id}')">` : `<div class="catch-thumb" style="background: linear-gradient(135deg, var(--accent-red) 0%, hsl(145, 25%, ${40 + idx * 5}%) 100%); cursor: pointer;" onclick="App.viewCatchDetails('${c.id}')">🐟</div>`}
               <div class="catch-info" style="flex: 1; cursor: pointer;" onclick="App.viewCatchDetails('${c.id}')">
                 <div class="catch-name">${c.species}</div>
                 <div class="catch-meta">${this.formatDate(c.date)} • ${c.bait}</div>

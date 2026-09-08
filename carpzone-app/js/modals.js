@@ -87,20 +87,22 @@ function openModal(title, content, onSave, onCancel) {
     transition: all 0.2s;
   `;
   saveBtn.onclick = async () => {
+    if (saveBtn.disabled) return;
     const form = formContainer.querySelector('form');
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
-    
-    // Validation
+    if (!form || !form.reportValidity() || !CatchPhotoPicker.ready(form)) return;
+    const data = Object.fromEntries(new FormData(form));
     const errors = validateForm(data);
-    if (errors.length > 0) {
-      alert('Erreurs:\n' + errors.join('\n'));
-      return;
-    }
-    
-    const saved = await onSave(data, form);
-    if (saved) {
-      closeModal();
+    if (errors.length) { alert('Erreurs:\n' + errors.join('\n')); return; }
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Enregistrement…';
+    try {
+      if (await onSave(data, form)) closeModal();
+    } catch (error) {
+      console.error(error);
+      showNotification('Enregistrement impossible. Votre formulaire est conservé.');
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Enregistrer';
     }
   };
 
@@ -133,6 +135,7 @@ function openModal(title, content, onSave, onCancel) {
 
   document.body.appendChild(backdrop);
   backdrop.id = 'modal-backdrop';
+  CatchPhotoPicker.init(formContainer.querySelector('form'));
 }
 
 function closeModal() {
@@ -159,35 +162,6 @@ function validateForm(data) {
   if (data.species && !data.species.trim()) errors.push('L\'espèce est obligatoire');
   
   return errors;
-}
-
-function compressImageFile(file, maxSize = 1280, quality = 0.78) {
-  return new Promise((resolve, reject) => {
-    if (!file || !file.type || !file.type.startsWith('image/')) {
-      resolve('');
-      return;
-    }
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error('Impossible de lire la photo'));
-    reader.onload = () => {
-      const img = new Image();
-      img.onerror = () => reject(new Error('Photo invalide'));
-      img.onload = () => {
-        let width = img.width;
-        let height = img.height;
-        const scale = Math.min(1, maxSize / Math.max(width, height));
-        width = Math.round(width * scale);
-        height = Math.round(height * scale);
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL('image/jpeg', quality));
-      };
-      img.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-  });
 }
 
 // ============================================
@@ -284,11 +258,7 @@ function openAddCatchForm(preselectedSessionId = '') {
 
   const content = `
     <form style="display:grid;gap:12px;">
-      <div>
-        <label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Photo de la prise</label>
-        <input type="file" name="photoFile" accept="image/*" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;">
-        <small style="color:#94a69b;">Choisir une photo dans la photothèque ou utiliser l’appareil photo.</small>
-      </div>
+      ${CatchPhotoPicker.markup()}
       <div>
         <label style="color:#a6b5a9;font-size:12px;display:block;margin-bottom:4px;">Session liée</label>
         <select name="sessionId" style="width:100%;padding:10px;background:#14271f;border:1px solid #365046;border-radius:6px;color:#fff;">
@@ -315,13 +285,7 @@ function openAddCatchForm(preselectedSessionId = '') {
   `;
 
   openModal('🐟 Nouvelle Prise', content, async (data, form) => {
-    const fileInput = form.querySelector('input[name="photoFile"]');
-    const file = fileInput?.files?.[0];
-    let photo = '';
-    if (file) {
-      try { photo = await compressImageFile(file); }
-      catch (e) { console.error(e); showNotification('Photo non enregistrée'); }
-    }
+    const photo = form.catchPhotoState?.photo || '';
 
     const session = data.sessionId ? AppData.sessions.find(s => s.id === data.sessionId) : null;
     addCatch({
