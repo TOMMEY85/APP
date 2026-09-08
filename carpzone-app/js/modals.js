@@ -286,8 +286,8 @@ function openAddCatchForm(preselectedSessionId = '') {
     <form style="display:grid;gap:12px;">
       <div>
         <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Photo de la prise</label>
-        <input type="file" name="photoFile" accept="image/*" capture="environment" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
-        <small style="color:#666;">Prendre une photo ou choisir dans la photothèque.</small>
+        <input type="file" name="photoFile" accept="image/*" style="width:100%;padding:10px;background:#0f0f0f;border:1px solid #333;border-radius:6px;color:#fff;">
+        <small style="color:#666;">Choisir une photo dans la photothèque ou utiliser l’appareil photo.</small>
       </div>
       <div>
         <label style="color:#999;font-size:12px;display:block;margin-bottom:4px;">Session liée</label>
